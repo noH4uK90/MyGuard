@@ -46,7 +46,7 @@ struct AuthView: View {
         Button {
             
         } label: {
-            Text("Forgett password?")
+            Text("Forget password?")
                 .fontWeight(.bold)
         }
         
@@ -68,4 +68,5 @@ struct AuthView: View {
 
 #Preview {
     AuthView()
+        .environment(\.locale, Locale(identifier: "RU"))
 }
