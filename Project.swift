@@ -13,6 +13,7 @@ let project = Project(
             destinations: .iOS,
             product: .app,
             bundleId: "io.tuist.MyGuard",
+            deploymentTargets: .iOS("17.5"),
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [
