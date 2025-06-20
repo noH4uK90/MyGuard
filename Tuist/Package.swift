@@ -18,6 +18,7 @@ let package = Package(
         // Add your own dependencies here:
         // .package(url: "https://github.com/Alamofire/Alamofire", from: "5.0.0"),
         // You can read more about dependencies here: https://docs.tuist.io/documentation/tuist/dependencies
-        .package(url: "https://github.com/uber/needle", from: "0.25.1")
+        .package(url: "https://github.com/uber/needle", from: "0.25.1"),
+        .package(url: "https://github.com/apple/swift-async-algorithms", from: "1.0.4"),
     ]
 )

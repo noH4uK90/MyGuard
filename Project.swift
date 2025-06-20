@@ -6,6 +6,7 @@ let project = Project(
     name: "MyGuard",
     packages: [
         .remote(url: "https://github.com/uber/needle", requirement: .exact("0.25.1")),
+        .remote(url: "https://github.com/apple/swift-async-algorithms", requirement: .upToNextMinor(from: "1.0.4"))
     ],
     targets: [
         .target(
@@ -35,7 +36,8 @@ let project = Project(
                 """, name: "Needle Generator")
             ],
             dependencies: [
-                .package(product: "NeedleFoundation", type: .runtime, condition: .none)
+                .package(product: "NeedleFoundation", type: .runtime, condition: .none),
+                .package(product: "swift-async-algorithms", type: .runtime, condition: .none)
             ],
         ),
         .target(
