@@ -36,7 +36,7 @@ struct AuthView: View {
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 15)
-        .glassEffectTextField(.windowBackground
+        .glassEffectTextField(.quaternary
             .shadow(.drop(color: .primary.opacity(0.45), radius: 2)),
                         in: .rect(cornerRadius: 20))
     }
