@@ -7,12 +7,24 @@
 
 import SwiftUI
 
-struct RootView: View {
+struct RootView<AuthView: AuthBuilder>: View {
+    
+    @ObservedObject var viewModel: RootViewModel
+    
+    var authBuilder: AuthView
+    
     var body: some View {
-        Text("Authorization")
+        NavigationStack {
+            Group {
+                switch viewModel.isAuthorized {
+                    case true:
+                        Button("Logout") {
+                            viewModel.logout()
+                        }
+                    case false:
+                        authBuilder.authView
+                }
+            }
+        }
     }
-}
-
-#Preview {
-    RootView()
 }

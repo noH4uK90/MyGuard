@@ -8,25 +8,37 @@
 import NeedleFoundation
 import SwiftUI
 
-class RootComponent: BootstrapComponent {
+final class RootComponent: BootstrapComponent {
     
     var rootViewModel: RootViewModel {
-        RootViewModel()
+        RootViewModel(authorizationService: authorizationService)
     }
     
     var rootView: some View {
-        RootView()
+        RootView(viewModel: rootViewModel, authBuilder: authComponent)
     }
 }
 
-// Dependencies
+// MARK: - Dependencies
 extension RootComponent {
+    var networkServiceComponent: NetworkServiceComponent {
+        NetworkServiceComponent(parent: self)
+    }
+    
     var networkService: NetworkServiceProtocol {
-        NetworkService(parent: self)
+        networkServiceComponent.networkService
+    }
+    
+    var authorizationServiceComponent: AuthorizationServiceComponent {
+        AuthorizationServiceComponent(parent: self)
+    }
+    
+    var authorizationService: AuthorizationServiceProtocol {
+        authorizationServiceComponent.authorizationService
     }
 }
 
-// Root component
+// MARK: - Auth component
 extension RootComponent {
     var authComponent: AuthComponent {
         return AuthComponent(parent: self)

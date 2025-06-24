@@ -7,10 +7,13 @@
 
 import SwiftUI
 
-struct AuthView: View {
+struct AuthView<Builder: RecoveryPasswordBuilder>: View {
     
-    @State var email: String = ""
-    @State var password: String = ""
+    @ObservedObject var viewModel: AuthViewModel
+    var recoveryPasswordBuilder: Builder
+    
+    @FocusState private var isEmailFocused: Bool
+    @FocusState private var isPasswordFocused: Bool
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -20,6 +23,7 @@ struct AuthView: View {
             Spacer().frame(height: 70)
             
             inputs
+            NavigationLink(destination: recoveryPasswordBuilder.view, label: { Text("") })
             
             buttons
         }
@@ -30,30 +34,47 @@ struct AuthView: View {
     @ViewBuilder
     var inputs: some View {
         Group {
-            TextField(text: $email, label: { Text("Email") })
+            HStack {
+                Image(systemName: "envelope")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(isEmailFocused ? Color.accentColor : .secondary)
+                    .frame(width: 20)
+                    .animation(.easeInOut(duration: 0.15), value: isEmailFocused)
+                TextField(text: $viewModel.email, label: { Text("Email") })
+                    .focused($isEmailFocused)
+            }
             
-            TextField(text: $password, label: { Text("Password") })
+            HStack {
+                Image(systemName: "lock")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(isPasswordFocused ? Color.accentColor : .secondary)
+                    .frame(width: 20)
+                    .animation(.easeInOut(duration: 0.15), value: isPasswordFocused)
+                    
+                TextField(text: $viewModel.password, label: { Text("Password") })
+                    .focused($isPasswordFocused)
+            }
         }
         .padding(.vertical, 10)
         .padding(.horizontal, 15)
-        .glassEffectTextField(.quaternary
+        .glassEffectTextField(.quinary
             .shadow(.drop(color: .primary.opacity(0.45), radius: 2)),
                         in: .rect(cornerRadius: 20))
     }
     
     @ViewBuilder
     var buttons: some View {
-        Button {
-            
-        } label: {
-            Text("Forget password?")
-                .fontWeight(.bold)
-        }
+        NavigationLink(
+            destination: recoveryPasswordBuilder.view,
+            label: {
+                Text("Forget password?")
+                    .fontWeight(.bold)
+            })
         
         Spacer().frame(height: 30)
         
         Button {
-            
+            viewModel.login()
         } label: {
             Text("Login")
                 .contentTransition(.numericText())
@@ -66,7 +87,7 @@ struct AuthView: View {
     }
 }
 
-#Preview {
-    AuthView()
-        .environment(\.locale, Locale(identifier: "RU"))
-}
+//#Preview {
+//    AuthView()
+//        .environment(\.locale, Locale(identifier: "RU"))
+//}

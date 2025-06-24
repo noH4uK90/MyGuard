@@ -7,6 +7,18 @@
 
 import Foundation
 
-class AuthViewModel: ObservableObject {
+final class AuthViewModel: ObservableObject {
     
+    let authorizationService: AuthorizationServiceProtocol
+    
+    @Published var email: String = ""
+    @Published var password: String = ""
+    
+    init(authorizationService: AuthorizationServiceProtocol) {
+        self.authorizationService = authorizationService
+    }
+    
+    func login() {
+        authorizationService.login()
+    }
 }

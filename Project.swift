@@ -37,7 +37,7 @@ let project = Project(
             ],
             dependencies: [
                 .package(product: "NeedleFoundation", type: .runtime, condition: .none),
-                .package(product: "swift-async-algorithms", type: .runtime, condition: .none)
+                .package(product: "AsyncAlgorithms", type: .runtime, condition: .none)
             ],
         ),
         .target(
