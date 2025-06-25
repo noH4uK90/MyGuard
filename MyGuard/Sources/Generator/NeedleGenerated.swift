@@ -63,6 +63,19 @@ private class NetworkServiceDependency029df3653966923d4a2bProvider: NetworkServi
 private func factory135f53c453d8e7c03d43e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NetworkServiceDependency029df3653966923d4a2bProvider()
 }
+private class NavigationServiceDependencycb91f8e41c08e70d616dProvider: NavigationServiceDependency {
+    var authorizationState: AuthorizationStateProtocol {
+        return rootComponent.authorizationState
+    }
+    private let rootComponent: RootComponent
+    init(rootComponent: RootComponent) {
+        self.rootComponent = rootComponent
+    }
+}
+/// ^->RootComponent->NavigationServiceComponent
+private func factorye0c8ac25639f48c884dab3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NavigationServiceDependencycb91f8e41c08e70d616dProvider(rootComponent: parent1(component) as! RootComponent)
+}
 private class NetworkServiceDependencyd56facc1b0367d1943deProvider: NetworkServiceDependency {
 
 
@@ -104,6 +117,11 @@ extension NetworkServiceComponent: NeedleFoundation.Registration {
 
     }
 }
+extension NavigationServiceComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\NavigationServiceDependency.authorizationState] = "authorizationState-AuthorizationStateProtocol"
+    }
+}
 extension NetworkService: NeedleFoundation.Registration {
     public func registerItems() {
 
@@ -130,6 +148,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->RootComponent->AuthComponent", factoryfef8ce3e5d7a6687fadeb3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->AuthorizationServiceComponent", factorya33cbca5714df39a73d6e3b0c44298fc1c149afb)
     registerProviderFactory("^->RootComponent->NetworkServiceComponent", factory135f53c453d8e7c03d43e3b0c44298fc1c149afb)
+    registerProviderFactory("^->RootComponent->NavigationServiceComponent", factorye0c8ac25639f48c884dab3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->NetworkServiceComponent->NetworkService", factoryf992c75d0019970daabce3b0c44298fc1c149afb)
 }
 #endif

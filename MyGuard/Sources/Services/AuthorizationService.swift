@@ -7,9 +7,11 @@
 
 import Foundation
 
-protocol AuthorizationServiceProtocol {
+protocol AuthorizationStateProtocol {
     var isAuthorized: Bool { get }
-    
+}
+
+protocol AuthorizationServiceProtocol: AuthorizationStateProtocol {
     func login()
     func logout()
 }

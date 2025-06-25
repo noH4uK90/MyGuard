@@ -11,17 +11,18 @@ import SwiftUI
 final class RootComponent: BootstrapComponent {
     
     var rootViewModel: RootViewModel {
-        RootViewModel(authorizationService: authorizationService)
+        RootViewModel(authorizationService: authorizationService, navigationService: navigationService)
     }
     
     var rootView: some View {
-        RootView(viewModel: rootViewModel, authBuilder: authComponent)
+        RootView(viewModel: rootViewModel, authBuilder: authComponent )
     }
 }
 
 // MARK: - Dependencies
 extension RootComponent {
-    var networkServiceComponent: NetworkServiceComponent {
+    // MARK: Network Service
+    private var networkServiceComponent: NetworkServiceComponent {
         NetworkServiceComponent(parent: self)
     }
     
@@ -29,12 +30,25 @@ extension RootComponent {
         networkServiceComponent.networkService
     }
     
-    var authorizationServiceComponent: AuthorizationServiceComponent {
+    // MARK: Authorization Service
+    private var authorizationServiceComponent: AuthorizationServiceComponent {
         AuthorizationServiceComponent(parent: self)
     }
     
     var authorizationService: AuthorizationServiceProtocol {
         authorizationServiceComponent.authorizationService
+    }
+    var authorizationState: AuthorizationStateProtocol {
+        authorizationService as AuthorizationStateProtocol
+    }
+    
+    // MARK: Navigation Service
+    private var navigationServiceComponent: NavigationServiceComponent {
+        NavigationServiceComponent(parent: self)
+    }
+    
+    var navigationService: NavigationServiceProtocol {
+        navigationServiceComponent.navigationService
     }
 }
 

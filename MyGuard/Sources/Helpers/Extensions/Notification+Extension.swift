@@ -9,4 +9,6 @@ import Foundation
 
 extension Notification.Name {
     static let isAuthorizedChanged = Notification.Name("isAuthorizedChanged")
+    
+    static let isTabBarShowingChanged = Notification.Name("isTabBarShowingChanged")
 }
