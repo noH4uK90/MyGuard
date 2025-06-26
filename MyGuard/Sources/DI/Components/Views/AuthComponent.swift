@@ -8,14 +8,15 @@
 import NeedleFoundation
 import SwiftUI
 
-final class AuthComponent: Component<AuthDependency>, AuthBuilder {
+final class AuthComponent: Component<AuthDependency>, ViewsBuilder {
     
-    var authViewModel: AuthViewModel {
+    
+    var viewModel: AuthViewModel {
         AuthViewModel(authorizationService: dependency.authorizationService)
     }
     
-    var authView: AuthView<RecoveryPasswordComponent> {
-        return AuthView(viewModel: authViewModel, recoveryPasswordBuilder: recoveryPasswordComponent)
+    var view: AuthView<RecoveryPasswordComponent> {
+        return AuthView(viewModel: viewModel, recoveryPasswordBuilder: recoveryPasswordComponent)
     }
     
     var recoveryPasswordComponent: RecoveryPasswordComponent {
@@ -26,5 +27,5 @@ final class AuthComponent: Component<AuthDependency>, AuthBuilder {
 protocol AuthBuilder {
     associatedtype ContentView: View
     
-    var authView: ContentView { get }
+    var view: ContentView { get }
 }

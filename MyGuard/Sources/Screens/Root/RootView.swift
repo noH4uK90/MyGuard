@@ -7,13 +7,16 @@
 
 import SwiftUI
 
-struct RootView<AuthView: AuthBuilder>: View {
+struct RootView<Auth: ViewsBuilder, Analytics: ViewsBuilder, Profile: ViewsBuilder, PasswordList: ViewsBuilder>: View {
     
     @ObservedObject var viewModel: RootViewModel
     
     @State var searchText: String = ""
     
-    var authBuilder: AuthView
+    var authBuilder: Auth
+    var analyticsBuilder: Analytics
+    var profileBuilder: Profile
+    var passwordListBuilder: PasswordList
     
     var body: some View {
         Group {
@@ -21,7 +24,9 @@ struct RootView<AuthView: AuthBuilder>: View {
                 case true:
                     tabView
                 case false:
-                    authBuilder.authView
+                    NavigationStack {
+                        authBuilder.view
+                    }
             }
         }
     }
@@ -43,22 +48,30 @@ struct RootView<AuthView: AuthBuilder>: View {
         TabView {
             Tab("Passwords", systemImage: "key.shield") {
                 NavigationStack {
-                    
+                    passwordListBuilder.view
                 }
             }
             
             Tab("Analytics", systemImage: "chart.bar") {
                 NavigationStack {
-                    
+                    analyticsBuilder.view
                 }
             }
             
             Tab("Profile", systemImage: "person.circle") {
                 NavigationStack {
-                    
+                    profileBuilder.view
                 }
             }
+            
+            Tab("Search", systemImage: "magnifyingglass", role: .search) {
+                NavigationStack {
+                    passwordListBuilder.view
+                }
+                .searchable(text: $searchText)
+            }
         }
+        .tabBarMinimizeBehavior(.onScrollDown)
     }
     
     // MARK: - Legacy TabView
@@ -66,7 +79,7 @@ struct RootView<AuthView: AuthBuilder>: View {
     var legacyTabView: some View {
         TabView {
             NavigationStack {
-                Text("Passwords")
+                passwordListBuilder.view
             }
                 .tabItem {
                     Label("Passwords", systemImage: "key")
@@ -74,14 +87,14 @@ struct RootView<AuthView: AuthBuilder>: View {
                 }
             
             NavigationStack {
-                Text("Analytics")
+                analyticsBuilder.view
             }
                 .tabItem {
                     Label("Analytics", systemImage: "chart.bar")
                 }
             
             NavigationStack {
-                Text("Profile")
+                profileBuilder.view
             }
                 .tabItem {
                     Label("Profile", systemImage: "person.circle")

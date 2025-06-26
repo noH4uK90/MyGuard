@@ -15,7 +15,13 @@ final class RootComponent: BootstrapComponent {
     }
     
     var rootView: some View {
-        RootView(viewModel: rootViewModel, authBuilder: authComponent )
+        RootView(
+            viewModel: rootViewModel,
+            authBuilder: authComponent,
+            analyticsBuilder: analyticsComponent,
+            profileBuilder: profileComponent,
+            passwordListBuilder: passwordListComponent
+        )
     }
 }
 
@@ -55,6 +61,27 @@ extension RootComponent {
 // MARK: - Auth component
 extension RootComponent {
     var authComponent: AuthComponent {
-        return AuthComponent(parent: self)
+        AuthComponent(parent: self)
+    }
+}
+
+// MARK: - Analytics component
+extension RootComponent {
+    var analyticsComponent: AnalyticsComponent {
+        AnalyticsComponent(parent: self)
+    }
+}
+
+// MARK: - Profile component
+extension RootComponent {
+    var profileComponent: ProfileComponent {
+        ProfileComponent(parent: self)
+    }
+}
+
+// MARK: - Password list component
+extension RootComponent {
+    var passwordListComponent: PasswordListComponent {
+        PasswordListComponent(parent: self)
     }
 }

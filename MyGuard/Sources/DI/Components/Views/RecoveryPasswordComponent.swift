@@ -8,7 +8,7 @@
 import NeedleFoundation
 import SwiftUI
 
-final class RecoveryPasswordComponent: Component<RecoveryPasswordDependency>, RecoveryPasswordBuilder {
+final class RecoveryPasswordComponent: Component<RecoveryPasswordDependency>, ViewsBuilder {
     
     typealias ViewModel = RecoveryPasswordViewModel
     
@@ -24,5 +24,5 @@ final class RecoveryPasswordComponent: Component<RecoveryPasswordDependency>, Re
 protocol RecoveryPasswordBuilder {
     associatedtype ContentView: View
     
-    var view: Self.ContentView { get }
+    var view: ContentView { get }
 }

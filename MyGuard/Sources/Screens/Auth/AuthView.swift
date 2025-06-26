@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AuthView<Builder: RecoveryPasswordBuilder>: View {
+struct AuthView<Builder: ViewsBuilder>: View {
     
     @ObservedObject var viewModel: AuthViewModel
     var recoveryPasswordBuilder: Builder
@@ -23,7 +23,6 @@ struct AuthView<Builder: RecoveryPasswordBuilder>: View {
             Spacer().frame(height: 70)
             
             inputs
-            NavigationLink(destination: recoveryPasswordBuilder.view, label: { Text("") })
             
             buttons
         }
