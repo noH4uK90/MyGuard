@@ -18,13 +18,27 @@ protocol NetworkServiceProtocol {
         where TResult: Decodable, TBody: Encodable
 }
 
-final class NetworkService: Component<NetworkServiceDependency>, NetworkServiceProtocol {
+final class NetworkService: NetworkServiceProtocol {
+    
+    private let cache = URLCache.shared
+    private let config = URLSessionConfiguration.default
+    
+    init() {
+        setupConfiguration()
+    }
+    
     func execute<TResult>(for url: URL, _ method: HTTPMethod, _ headers: Headers? = nil) async throws -> TResult
         where TResult : Decodable
     {
         let request = createRequest(for: url, method)
         
-        let (data, _) = try await URLSession.shared.data(for: request)
+        if method == .GET, let cacheResponse = self.cache.cachedResponse(for: request) {
+            return try JSONDecoder().decode(TResult.self, from: cacheResponse.data)
+        }
+        
+        let (data, response) = try await URLSession(configuration: self.config).data(for: request)
+        
+        self.cache.storeCachedResponse(CachedURLResponse(response: response, data: data), for: request)
         
         return try JSONDecoder().decode(TResult.self, from: data)
     }
@@ -35,7 +49,13 @@ final class NetworkService: Component<NetworkServiceDependency>, NetworkServiceP
         let bodyData = try JSONEncoder().encode(body)
         let request = createRequest(for: url, with: bodyData, method)
         
-        let (data, _) = try await URLSession.shared.data(for: request)
+        if method == .GET, let cacheResponse = self.cache.cachedResponse(for: request) {
+            return try JSONDecoder().decode(TResult.self, from: cacheResponse.data)
+        }
+        
+        let (data, response) = try await URLSession(configuration: self.config).data(for: request)
+        
+        self.cache.storeCachedResponse(CachedURLResponse(response: response, data: data), for: request)
         
         return try JSONDecoder().decode(TResult.self, from: data)
     }
@@ -66,5 +86,13 @@ extension NetworkService {
 extension NetworkService {
     private func setDefaultHeaders(for request: inout URLRequest) {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    }
+}
+
+// MARK: - Setup configuration
+extension NetworkService {
+    private func setupConfiguration() {
+        self.config.urlCache = self.cache
+        self.config.requestCachePolicy = .returnCacheDataElseLoad
     }
 }

@@ -10,6 +10,6 @@ import NeedleFoundation
 final class NetworkServiceComponent: Component<NetworkServiceDependency> {
     
     var networkService: NetworkServiceProtocol {
-        shared { NetworkService(parent: self) }
+        shared { NetworkService() }
     }
 }

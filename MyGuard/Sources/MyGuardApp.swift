@@ -7,6 +7,7 @@ struct MyGuardApp: App {
     
     init() {
         registerProviderFactories()
+        AppConfig.shared.setupToken()
     }
     
     var body: some Scene {
