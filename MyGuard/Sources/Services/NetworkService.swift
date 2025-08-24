@@ -10,7 +10,7 @@ import NeedleFoundation
 
 typealias Headers = [String: String]
 
-protocol NetworkServiceProtocol {
+protocol NetworkServiceProtocol: Sendable {
     func execute<TResult>(for url: URL, _ method: HTTPMethod, _ headers: Headers?) async throws -> TResult
         where TResult: Decodable
     
@@ -21,10 +21,12 @@ protocol NetworkServiceProtocol {
 final class NetworkService: NetworkServiceProtocol {
     
     private let cache = URLCache.shared
-    private let config = URLSessionConfiguration.default
+    private let config: URLSessionConfiguration
+    private let session: URLSession
     
     init() {
-        setupConfiguration()
+        self.config = NetworkService.setupConfiguration(self.cache)
+        self.session = URLSession(configuration: config)
     }
     
     func execute<TResult>(for url: URL, _ method: HTTPMethod, _ headers: Headers? = nil) async throws -> TResult
@@ -32,15 +34,20 @@ final class NetworkService: NetworkServiceProtocol {
     {
         let request = createRequest(for: url, method)
         
-        if method == .GET, let cacheResponse = self.cache.cachedResponse(for: request) {
-            return try JSONDecoder().decode(TResult.self, from: cacheResponse.data)
+        let (data, response) = try await session.data(for: request)
+        try handleError(response)
+        
+        print("\n\n\n\(response)\n\n\n")
+        
+        if data.isEmpty {
+            if let empty = EmptyResponse() as? TResult {
+                return empty
+            } else {
+                throw URLError(.zeroByteResource)
+            }
+        } else {
+            return try JSONDecoder().decode(TResult.self, from: data)
         }
-        
-        let (data, response) = try await URLSession(configuration: self.config).data(for: request)
-        
-        self.cache.storeCachedResponse(CachedURLResponse(response: response, data: data), for: request)
-        
-        return try JSONDecoder().decode(TResult.self, from: data)
     }
     
     func execute<TResult, TBody>(for url: URL, with body: TBody, _ method: HTTPMethod, _ headers: Headers? = nil) async throws -> TResult
@@ -49,15 +56,18 @@ final class NetworkService: NetworkServiceProtocol {
         let bodyData = try JSONEncoder().encode(body)
         let request = createRequest(for: url, with: bodyData, method)
         
-        if method == .GET, let cacheResponse = self.cache.cachedResponse(for: request) {
-            return try JSONDecoder().decode(TResult.self, from: cacheResponse.data)
+        let (data, response) = try await session.data(for: request)
+        try handleError(response)
+        
+        if data.isEmpty {
+            if let empty = EmptyResponse() as? TResult {
+                return empty
+            } else {
+                throw URLError(.zeroByteResource)
+            }
+        } else {
+            return try JSONDecoder().decode(TResult.self, from: data)
         }
-        
-        let (data, response) = try await URLSession(configuration: self.config).data(for: request)
-        
-        self.cache.storeCachedResponse(CachedURLResponse(response: response, data: data), for: request)
-        
-        return try JSONDecoder().decode(TResult.self, from: data)
     }
     
 }
@@ -91,8 +101,30 @@ extension NetworkService {
 
 // MARK: - Setup configuration
 extension NetworkService {
-    private func setupConfiguration() {
-        self.config.urlCache = self.cache
-        self.config.requestCachePolicy = .returnCacheDataElseLoad
+    private static func setupConfiguration(_ cache: URLCache?) -> URLSessionConfiguration {
+        let config = URLSessionConfiguration.default
+        config.urlCache = cache
+        config.requestCachePolicy = .useProtocolCachePolicy
+        return config
+    }
+}
+
+// MARK: - Error handling
+extension NetworkService {
+    private func handleError(_ response: URLResponse) throws {
+        guard let response = response as? HTTPURLResponse else {
+            throw NetworkError.unknown
+        }
+        
+        switch response.statusCode {
+            case 200..<300:
+                break
+            case 403:
+                throw NetworkError.forbidden
+            case 404:
+                throw NetworkError.notFound
+            default:
+                throw NetworkError.unknown
+        }
     }
 }

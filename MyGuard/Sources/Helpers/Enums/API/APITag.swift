@@ -9,5 +9,7 @@ import Foundation
 
 enum APITag: String {
     case auth = "/auth"
-    case user = "/user"
+    case user = "/users"
+    case folder = "/folders"
+    case password = "/passwords"
 }

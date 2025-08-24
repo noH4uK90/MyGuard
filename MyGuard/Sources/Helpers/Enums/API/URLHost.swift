@@ -8,5 +8,5 @@
 import Foundation
 
 enum URLHost: String {
-    case baseURL = ""
+    case baseURL = "pass.st29.ru"
 }

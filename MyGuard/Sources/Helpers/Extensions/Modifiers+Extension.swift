@@ -12,7 +12,7 @@ extension View {
     @ViewBuilder
     func applyGlassIfAvailable(in shape: some Shape = .capsule, isEnabled: Bool = true) -> some View {
         if #available(iOS 26, *) {
-            self.glassEffect(.regular, in: shape, isEnabled: isEnabled)
+            self.glassEffect(.regular, in: shape)
         } else {
             self
         }
@@ -98,5 +98,54 @@ extension View {
         } else {
             self
         }
+    }
+}
+
+// MARK: Disable back swipe
+struct DisableSwipeBackView: UIViewControllerRepresentable {
+    
+    typealias UIViewControllerType = DisableSwipeBackViewController
+    
+    
+    func makeUIViewController(context: Context) -> UIViewControllerType {
+        UIViewControllerType()
+    }
+    
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+    }
+}
+
+class DisableSwipeBackViewController: UIViewController {
+    
+    override func didMove(toParent parent: UIViewController?) {
+        super.didMove(toParent: parent)
+        if let parent = parent?.parent,
+           let navigationController = parent.navigationController,
+           let interactivePopGestureRecognizer = navigationController.interactivePopGestureRecognizer {
+            navigationController.view.removeGestureRecognizer(interactivePopGestureRecognizer)
+        }
+    }
+}
+
+extension View {
+    func disableSwipeBack() -> some View {
+        self.background(DisableSwipeBackView())
+    }
+}
+
+// MARK: - Shake effect
+struct ShakeEffect: GeometryEffect {
+    var travelDistance: CGFloat = 6
+    var shakePerUnit = 3
+    var animatableData: CGFloat
+    
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(translationX: travelDistance * sin(animatableData * .pi * CGFloat(shakePerUnit)), y: 0))
+    }
+}
+
+extension View {
+    func shakeEffect(travelDistance: CGFloat = 6, shakePerUnit: Int = 3, animatableData: CGFloat) -> some View {
+        self.modifier(ShakeEffect(travelDistance: travelDistance, shakePerUnit: shakePerUnit, animatableData: animatableData))
     }
 }

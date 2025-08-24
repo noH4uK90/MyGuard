@@ -7,8 +7,9 @@
 
 import SwiftUI
 
-protocol ViewsBuilder {
+@MainActor
+protocol ViewsBuilder: Sendable {
     associatedtype ContentType: View
     
-    var view: ContentType { get }
+    @ViewBuilder var view: ContentType { get }
 }

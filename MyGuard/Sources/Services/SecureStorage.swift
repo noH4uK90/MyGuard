@@ -8,7 +8,7 @@
 import Foundation
 import Security
 
-final class SecureStorage {
+final class SecureStorage: Sendable {
     static let shared = SecureStorage(); private init() {}
     
     enum KeychainError: Error {

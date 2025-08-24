@@ -11,4 +11,8 @@ extension Notification.Name {
     static let isAuthorizedChanged = Notification.Name("isAuthorizedChanged")
     
     static let isTabBarShowingChanged = Notification.Name("isTabBarShowingChanged")
+    
+    static let isUnlockedChanged = Notification.Name("isUnlockedChanged")
+    
+    static let hasPassCodeChanged = Notification.Name("hasPassCodeChanged")
 }

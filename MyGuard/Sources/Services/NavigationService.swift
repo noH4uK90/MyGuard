@@ -28,6 +28,18 @@ final class NavigationService: NavigationServiceProtocol {
         }
     }
     
+    var isUnlocked: Bool {
+        get {
+            authorizationState.isUnlocked
+        }
+    }
+    
+    var hasPassCode: Bool {
+        get {
+            authorizationState.hasPassCode
+        }
+    }
+    
     var isTabBarShowing: Bool {
         get {
             defaults.bool(forKey: "isTabBarShowing")
@@ -36,13 +48,11 @@ final class NavigationService: NavigationServiceProtocol {
     
     func showTabBar() {
         defaults.set(true, forKey: "isTabBarShowing")
-        print("Show tab bar \(isTabBarShowing)")
         NotificationCenter.default.post(name: .isTabBarShowingChanged, object: nil)
     }
     
     func hideTabBar() {
         defaults.set(false, forKey: "isTabBarShowing")
-        print("Hide tab bar \(isTabBarShowing)")
         NotificationCenter.default.post(name: .isTabBarShowingChanged, object: nil)
     }
     
