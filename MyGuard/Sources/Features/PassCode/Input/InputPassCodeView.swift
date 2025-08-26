@@ -32,7 +32,7 @@ struct InputPassCodeView: View {
                 Spacer()
 
                 VStack {
-                    Text("Enter your Passcode")
+                    Text("inputPassCodeTitle")
                         .font(.title2)
 
                     HStack(alignment: .center) {
@@ -98,7 +98,7 @@ struct InputPassCodeView: View {
         Button {
             store.send(.enterWithBiometry)
         } label: {
-            Text("Log out")
+            Text("logoutButtonTitle")
                 .font(.system(size: 19, weight: .regular))
                 .foregroundStyle(Color.accentColor.gradient)
                 .frame(width: buttonSize, height: buttonSize)

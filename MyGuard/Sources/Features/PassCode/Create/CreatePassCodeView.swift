@@ -23,17 +23,17 @@ struct CreatePassCodeView: View {
     var body: some View {
         VStack(alignment: .center) {
             
-            Text("Create a Passcode")
+            Text("createPassCodeTitle")
                 .font(.title3.weight(.semibold))
                 .padding(.bottom, 1)
 
-            Text("You’ll use this passcode to access the app")
+            Text("passCodeDescription")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
                 .padding(.bottom, 25)
             
             
-            Text("Enter Passсode")
+            Text("inputPassCodeTitle")
                 .font(.callout)
             SecureField("", text: Binding(get: { store.passCode }, set: { text, _ in store.send(.changePassCode(\.passCode, text)) }))
                 .multilineTextAlignment(.center)
@@ -71,7 +71,7 @@ struct CreatePassCodeView: View {
                     .frame(height: 20)
                 
                 Group {
-                    Text("Confirm Passсode")
+                    Text("confirmPassCodeTitle")
                         .font(.callout)
                     SecureField("", text: Binding(get: { store.confirmationPassCode }, set: { text, _ in store.send(.changePassCode(\.confirmationPassCode, text)) }))
                         .multilineTextAlignment(.center)
@@ -128,7 +128,7 @@ struct CreatePassCodeView: View {
                 Button {
                     store.send(.save)
                 } label: {
-                    Text("Save")
+                    Text("saveButtonTitle")
                         .contentTransition(.numericText())
                         .foregroundStyle(.white)
                         .fontWeight(.semibold)

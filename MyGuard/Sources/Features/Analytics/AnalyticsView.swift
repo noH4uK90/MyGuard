@@ -17,8 +17,8 @@ struct PasswordCategory: Identifiable {
 
 struct AnalyticsView: View {
     let data: [PasswordCategory] = [
-        PasswordCategory(label: "Безопасный", value: 24, color: .green),
-        PasswordCategory(label: "Слабый", value: 26, color: .red)
+        PasswordCategory(label: "passwordCategorySecureLabel", value: 24, color: .green),
+        PasswordCategory(label: "passwordCategoryWeakLabel", value: 26, color: .red)
     ]
     
     let value: Double = 0.48
@@ -27,7 +27,7 @@ struct AnalyticsView: View {
         ScrollView {
             VStack {
                 Gauge(value: value) {
-                    Text("Безопасность")
+                    Text("securityGaugeLabel")
                 } currentValueLabel: {
                     Text("\(Int(value * 100))%")
                 }

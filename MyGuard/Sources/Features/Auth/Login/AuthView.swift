@@ -19,7 +19,7 @@ struct AuthView<Builder: ViewsBuilder>: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            Text("Authorization")
+            Text("authorizationTitle")
                 .font(.largeTitle.bold())
             
             Spacer().frame(height: 70)
@@ -41,7 +41,7 @@ struct AuthView<Builder: ViewsBuilder>: View {
                     .foregroundStyle(isEmailFocused ? Color.accentColor : .secondary)
                     .frame(width: 20)
                     .animation(.easeInOut(duration: 0.15), value: isEmailFocused)
-                TextField(text: Binding(get: { store.email }, set: { text, _ in store.send(.textChange(\.email, text)) }), label: { Text("Email") })
+                TextField(text: Binding(get: { store.email }, set: { text, _ in store.send(.textChange(\.email, text)) }), label: { Text("emailTextFieldPlaceholder") })
                     .focused($isEmailFocused)
             }
             
@@ -52,7 +52,7 @@ struct AuthView<Builder: ViewsBuilder>: View {
                     .frame(width: 20)
                     .animation(.easeInOut(duration: 0.15), value: isPasswordFocused)
                     
-                TextField(text: Binding(get: { store.password }, set: { text, _ in store.send(.textChange(\.password, text)) }), label: { Text("Password") })
+                TextField(text: Binding(get: { store.password }, set: { text, _ in store.send(.textChange(\.password, text)) }), label: { Text("passwordTextFieldPlaceholder") })
                     .focused($isPasswordFocused)
             }
         }
@@ -68,7 +68,7 @@ struct AuthView<Builder: ViewsBuilder>: View {
         NavigationLink(
             destination: recoveryPasswordBuilder.view,
             label: {
-                Text("Forget password?")
+                Text("forgetPasswordButtonTitle")
                     .fontWeight(.bold)
             })
         
@@ -77,7 +77,7 @@ struct AuthView<Builder: ViewsBuilder>: View {
         Button {
             store.send(.loginOnTap)
         } label: {
-            Text("Login")
+            Text("loginButtonTitle")
                 .contentTransition(.numericText())
                 .foregroundStyle(.white)
                 .fontWeight(.semibold)

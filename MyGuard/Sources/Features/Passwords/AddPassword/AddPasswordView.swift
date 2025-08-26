@@ -27,13 +27,13 @@ struct AddPasswordView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button("Cancel") {
+                Button("cancelButtonTitle") {
                     dismiss()
                 }
             }
             
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Save") {
+                Button("saveButtonTitle") {
                     store.send(.save(dismiss()))
                 }
                 .disabled(!store.canSave)

@@ -23,9 +23,10 @@ struct PasswordDetailReducer: Reducer, Sendable {
         
         init(draft: PasswordDetail) {
             self.draft = draft
+            self.backup = draft
         }
         
-        private var backup: PasswordDetail?
+        private(set) var backup: PasswordDetail
         
         mutating func changeBackup(to detail: PasswordDetail) {
             self.backup = detail
@@ -101,6 +102,7 @@ struct PasswordDetailReducer: Reducer, Sendable {
                     state.uiState = .detail
                 }
             case let .cancelConfirmationOnTap(isConfirmed):
+                state.draft = state.backup
                 state.isShowingCancelConfirmation = false
                 if isConfirmed {
                     state.uiState = .detail

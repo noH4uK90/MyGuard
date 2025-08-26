@@ -42,29 +42,29 @@ struct PasswordDetailView: View {
                 .disableSwipeBack()
                 .navigationBarBackButtonHidden()
                 .confirmationDialog(
-                    "You will losee the changes you made.",
+                    "cancelConfirmationDialogMessage",
                     isPresented: Binding(
                         get: { self.store.isShowingCancelConfirmation },
                         set: { _, _ in store.send(.cancelOnTap) }
                     )
                 ) {
-                    Button("Discard Changed", role: .destructive) {
+                    Button("cancelConfirmationDialogCancel", role: .destructive) {
                         store.send(.cancelConfirmationOnTap(true))
                     }
-                    Button("Continue Editing", role: .cancel) {
+                    Button("cancelConfirmationDialogKeep", role: .cancel) {
                         store.send(.cancelConfirmationOnTap(false))
                     }
                 }
                 .confirmationDialog(
-                    "This password will be permanently deleted.",
+                    "deleteConfirmationDialogMessage",
                     isPresented: Binding(
                         get: { store.isShowingDeleteConfirmation },
                         set: { _, _ in store.send(.deleteOnTap) })
                 ) {
-                    Button("Delete Password", role: .destructive) {
+                    Button("deleteConfirmationDialogDelete", role: .destructive) {
                         store.send(.deleteConfirmationOnTap(true, dismiss()))
                     }
-                    Button("Cancel", role: .cancel) {
+                    Button("deleteConfirmationDialogKeep", role: .cancel) {
                         store.send(.deleteConfirmationOnTap(false, dismiss()))
                     }
                 }
@@ -74,19 +74,19 @@ struct PasswordDetailView: View {
         .toolbar {
             if store.uiState == .editing {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button("Cancel") {
+                    Button("cancelButtonTitle") {
                         store.send(.cancelOnTap)
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Save") {
+                    Button("saveButtonTitle") {
                         store.send(.saveOnTap)
                     }
                     .disabled(!store.canSave)
                 }
             } else {
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button("Edit") {
+                    Button("editButtonTitle") {
                         store.send(.editOnTap)
                     }
                     .disabled(store.uiState != .detail)
@@ -113,7 +113,7 @@ struct PasswordDetailView: View {
 
     var loginContent: some View {
         HStack(alignment: .center) {
-            Text("Login")
+            Text("loginTitle")
                 .font(.title3)
             Spacer()
             Text(store.draft.login)
@@ -126,7 +126,7 @@ struct PasswordDetailView: View {
 
     var passwordContent: some View {
         HStack(alignment: .center) {
-            Text("Password")
+            Text("passwordTitle")
                 .font(.title3)
             Spacer()
             if showPassword {
@@ -158,7 +158,7 @@ struct PasswordDetailView: View {
 
     var websiteContent: some View {
         HStack(alignment: .center) {
-            Text("Website")
+            Text("websiteTitle")
             Spacer()
             Text(store.draft.url)
                 .font(.callout)

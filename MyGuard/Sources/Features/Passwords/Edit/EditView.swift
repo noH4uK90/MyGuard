@@ -16,16 +16,16 @@ struct EditPasswordView: View {
     var body: some View {
         // Title Section
         Section {
-            TextField("Name", text: Binding(get: { draft.name }, set: { text,_ in _ = draftChange(\.name, text) }))
+            TextField("nameTextFieldPlaceholder", text: Binding(get: { draft.name }, set: { text,_ in _ = draftChange(\.name, text) }))
             
             HStack {
-                Text("Login")
+                Text("loginTitle")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 
                 Spacer()
                 
-                TextField("None", text: Binding(get: { draft.login }, set: { text,_ in _ = draftChange(\.login, text) }))
+                TextField("noneTextFieldPlaceholder", text: Binding(get: { draft.login }, set: { text,_ in _ = draftChange(\.login, text) }))
                     .monospaced()
                     .frame(maxWidth: 200)
                     .multilineTextAlignment(.trailing)
@@ -35,19 +35,19 @@ struct EditPasswordView: View {
         // Password Section
         Section {
             HStack {
-                Text("Password")
+                Text("passwordTitle")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 
                 Spacer()
                 
-                TextField("None", text: Binding(get: { draft.password }, set: { text,_ in _ = draftChange(\.password, text) }))
+                TextField("noneTextFieldPlaceholder", text: Binding(get: { draft.password }, set: { text,_ in _ = draftChange(\.password, text) }))
                     .monospaced()
                     .frame(maxWidth: 200)
                     .multilineTextAlignment(.trailing)
             }
             
-            Button("Generate password") {
+            Button("generatePasswordButtonTitle") {
                 _ = draftChange(\.password, generatePassword())
             }
         }
@@ -55,25 +55,25 @@ struct EditPasswordView: View {
         // Note Section
         Section {
             HStack {
-                Text("Website")
+                Text("websiteTitle")
                     .font(.headline)
                     .foregroundStyle(.secondary)
                 
                 Spacer()
                 
-                TextField("None", text: Binding(get: { draft.url }, set: { text,_ in _ = draftChange(\.url, text) }))
+                TextField("noneTextFieldPlaceholder", text: Binding(get: { draft.url }, set: { text,_ in _ = draftChange(\.url, text) }))
                     .monospaced()
                     .frame(maxWidth: 200)
                     .multilineTextAlignment(.trailing)
             }
             
-            TextField("Note", text: Binding(get: { draft.note }, set: { text,_ in _ = draftChange(\.note, text) }), axis: .vertical)
+            TextField("noteTextFieldPlaceholder", text: Binding(get: { draft.note }, set: { text,_ in _ = draftChange(\.note, text) }), axis: .vertical)
         }
         
         // Delete Section
         if let delete {
             Section {
-                Button("Delete", role: .destructive) { delete() }
+                Button("deleteButtonTitle", role: .destructive) { delete() }
             }
         }
     }

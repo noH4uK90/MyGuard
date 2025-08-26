@@ -19,7 +19,7 @@ struct ProfileView: View {
             Image(systemName: "person.circle.fill")
                 .resizable()
                 .frame(width: 50, height: 50)
-            Text("Имя пользователя")
+            Text("\("profileTitle")")
                 .font(.headline)
             
             Form {
@@ -41,13 +41,13 @@ struct ProfileView: View {
     
     private var passCodeSection: some View {
         Section {
-            NavigationLink("Change passcode", destination: {  })
+            NavigationLink("changePassCodeButtonTitle", destination: {  })
         }
     }
     
     private var logoutSection: some View {
         Section {
-            Button("Log out", role: .destructive) {
+            Button("logoutButtonTitle", role: .destructive) {
                 store.send(.logout)
             }
         }

@@ -18,11 +18,11 @@ struct AddFolderView: View {
         Form {
             Section {
                 HStack {
-                    Text("Name")
+                    Text("nameTextTitle")
                     
                     Spacer()
                     
-                    TextField("None", text: Binding(get: { store.name }, set: { text in store.send(.changeName(text)) }))
+                    TextField("noneTextFieldPlaceholder", text: Binding(get: { store.name }, set: { text in store.send(.changeName(text)) }))
                         .frame(maxWidth: 200)
                         .monospaced()
                         .multilineTextAlignment(.trailing)
@@ -33,13 +33,13 @@ struct AddFolderView: View {
         .navigationBarBackButtonHidden()
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button("Cancel") {
+                Button("cancleButtonTitle") {
                     dismiss()
                 }
             }
             
             ToolbarItem(placement: .topBarTrailing) {
-                Button("Save") {
+                Button("saveButtonTitle") {
                     store.send(.save(dismiss()))
                 }
                 .disabled(!store.canSave)

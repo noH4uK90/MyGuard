@@ -68,20 +68,20 @@ struct RootView<
     @ViewBuilder
     var modernTabView: some View {
         TabView {
-            Tab("Passwords", systemImage: "key.shield", role: .search) {
+            Tab("passwordTabTitle", systemImage: "key.shield", role: .search) {
                 NavigationStack {
                     passwordListBuilder.view
                         .searchable(text: $searchText)
                 }
             }
 
-            Tab("Profile", systemImage: "person.circle") {
+            Tab("profileTabTitle", systemImage: "person.circle") {
                 NavigationStack {
                     profileBuilder.view
                 }
             }
 
-            Tab("Analytics", systemImage: "chart.bar") {
+            Tab("analyticsTabTitle", systemImage: "chart.bar") {
                 NavigationStack {
                     analyticsBuilder.view
                 }
@@ -98,7 +98,7 @@ struct RootView<
                     .searchable(text: $searchText)
             }
             .tabItem {
-                Label("Passwords", systemImage: "key")
+                Label("passwordTabTitle", systemImage: "key")
                     .symbolVariant(.circle)
             }
 
@@ -106,14 +106,14 @@ struct RootView<
                 analyticsBuilder.view
             }
             .tabItem {
-                Label("Analytics", systemImage: "chart.bar")
+                Label("analyticsTabTitle", systemImage: "chart.bar")
             }
 
             NavigationStack {
                 profileBuilder.view
             }
             .tabItem {
-                Label("Profile", systemImage: "person.circle")
+                Label("profileTabTitle", systemImage: "person.circle")
             }
         }
     }

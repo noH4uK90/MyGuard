@@ -81,18 +81,18 @@ struct PasswordListView<DetailBuilder: PasswordDetailBuilder, AddPBuilder: AddPa
         NavigationLink(destination: {
             addFBuilder.view(folderId)
                 .toolbar(.hidden, for: .tabBar)
-        }, label: { Label("Add folder", systemImage: "folder.badge.plus") })
+        }, label: { Label("addFolderButtonTitle", systemImage: "folder.badge.plus") })
         
         NavigationLink(destination: {
             addPBuilder.view(folderId)
                 .toolbar(.hidden, for: .tabBar)
-        }, label: { Label("Add password", systemImage: "key") })
+        }, label: { Label("addPasswordButtonTitle", systemImage: "key") })
     }
     
     
     func deleteButton(_ folder: Folder) -> some View {
         Button(role: .destructive, action: { store.send(.delete(folder)) }) {
-            Label("Delete", systemImage: "trash")
+            Label("deleteButtonTitle", systemImage: "trash")
         }
     }
 }
