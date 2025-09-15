@@ -35,6 +35,19 @@ private class FolderNetworkDependencydcfba5bb04fba35f6290Provider: FolderNetwork
 private func factory9eb2d8c7977e8d710c25b3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
     return FolderNetworkDependencydcfba5bb04fba35f6290Provider(rootComponent: parent1(component) as! RootComponent)
 }
+private class AuthNetworkDependencyd480d7035bf7579188d3Provider: AuthNetworkDependency {
+    var networkService: NetworkServiceProtocol {
+        return rootComponent.networkService
+    }
+    private let rootComponent: RootComponent
+    init(rootComponent: RootComponent) {
+        self.rootComponent = rootComponent
+    }
+}
+/// ^->RootComponent->AuthNetworkComponent
+private func factory155e798144e1cd1fceccb3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AuthNetworkDependencyd480d7035bf7579188d3Provider(rootComponent: parent1(component) as! RootComponent)
+}
 private class PasswordNetworkDependencyaf4a1349c36b1e778d69Provider: PasswordNetworkDependency {
     var networkService: NetworkServiceProtocol {
         return rootComponent.networkService
@@ -49,15 +62,17 @@ private func factory75006564c7d7c8e05e5cb3a8f24c1d289f2c0f2e(_ component: Needle
     return PasswordNetworkDependencyaf4a1349c36b1e778d69Provider(rootComponent: parent1(component) as! RootComponent)
 }
 private class AuthorizationServiceDependency7cabb9f03075fe481372Provider: AuthorizationServiceDependency {
-
-
-    init() {
-
+    var authNetworkService: AuthNetworkProtocol {
+        return rootComponent.authNetworkService
+    }
+    private let rootComponent: RootComponent
+    init(rootComponent: RootComponent) {
+        self.rootComponent = rootComponent
     }
 }
 /// ^->RootComponent->AuthorizationServiceComponent
-private func factorya33cbca5714df39a73d6e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AuthorizationServiceDependency7cabb9f03075fe481372Provider()
+private func factorya33cbca5714df39a73d6b3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AuthorizationServiceDependency7cabb9f03075fe481372Provider(rootComponent: parent1(component) as! RootComponent)
 }
 private class NetworkServiceDependency029df3653966923d4a2bProvider: NetworkServiceDependency {
 
@@ -219,6 +234,11 @@ extension FolderNetworkComponent: NeedleFoundation.Registration {
         keyPathToName[\FolderNetworkDependency.networkService] = "networkService-NetworkServiceProtocol"
     }
 }
+extension AuthNetworkComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\AuthNetworkDependency.networkService] = "networkService-NetworkServiceProtocol"
+    }
+}
 extension PasswordNetworkComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\PasswordNetworkDependency.networkService] = "networkService-NetworkServiceProtocol"
@@ -226,7 +246,7 @@ extension PasswordNetworkComponent: NeedleFoundation.Registration {
 }
 extension AuthorizationServiceComponent: NeedleFoundation.Registration {
     public func registerItems() {
-
+        keyPathToName[\AuthorizationServiceDependency.authNetworkService] = "authNetworkService-AuthNetworkProtocol"
     }
 }
 extension NetworkServiceComponent: NeedleFoundation.Registration {
@@ -315,8 +335,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 
 @inline(never) private func register1() {
     registerProviderFactory("^->RootComponent->FolderNetworkComponent", factory9eb2d8c7977e8d710c25b3a8f24c1d289f2c0f2e)
+    registerProviderFactory("^->RootComponent->AuthNetworkComponent", factory155e798144e1cd1fceccb3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->PasswordNetworkComponent", factory75006564c7d7c8e05e5cb3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->AuthorizationServiceComponent", factorya33cbca5714df39a73d6e3b0c44298fc1c149afb)
+    registerProviderFactory("^->RootComponent->AuthorizationServiceComponent", factorya33cbca5714df39a73d6b3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->NetworkServiceComponent", factory135f53c453d8e7c03d43e3b0c44298fc1c149afb)
     registerProviderFactory("^->RootComponent->NavigationServiceComponent", factorye0c8ac25639f48c884dab3a8f24c1d289f2c0f2e)
     registerProviderFactory("^->RootComponent->AuthComponent->RecoveryPasswordComponent", factoryf97002da1394e2ecc1cee3b0c44298fc1c149afb)
