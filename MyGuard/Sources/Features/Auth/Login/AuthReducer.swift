@@ -40,6 +40,6 @@ struct AuthReducer: Reducer, Sendable {
     }
     
     func login(email: String, password: String) async throws {
-        dependency.authorizationService.login()
+        try await dependency.authorizationService.login(email, password)
     }
 }

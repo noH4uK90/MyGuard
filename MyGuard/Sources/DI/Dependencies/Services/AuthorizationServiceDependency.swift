@@ -8,5 +8,5 @@
 import NeedleFoundation
 
 protocol AuthorizationServiceDependency: Dependency {
-    
+    var authNetworkService: AuthNetworkProtocol { get }
 }

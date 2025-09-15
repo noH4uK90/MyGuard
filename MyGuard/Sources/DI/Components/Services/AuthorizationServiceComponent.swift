@@ -10,6 +10,6 @@ import NeedleFoundation
 final class AuthorizationServiceComponent: Component<AuthorizationServiceDependency> {
     
     var authorizationService: AuthorizationService {
-        shared { AuthorizationService() }
+        shared { AuthorizationService(authNetworkService: dependency.authNetworkService) }
     }
 }

@@ -68,6 +68,15 @@ extension RootComponent {
         passwordNetworkComponent.passwordNetworkService
     }
     
+    /// Authorization network service
+    var authNetworkComponent: AuthNetworkComponent {
+        AuthNetworkComponent(parent: self)
+    }
+    
+    var authNetworkService: AuthNetworkProtocol {
+        authNetworkComponent.authNetworkService
+    }
+    
     // MARK: Authorization Service
     private var authorizationServiceComponent: AuthorizationServiceComponent {
         AuthorizationServiceComponent(parent: self)

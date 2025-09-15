@@ -14,7 +14,7 @@ protocol AuthorizationStateProtocol {
 }
 
 protocol AuthorizationServiceProtocol: AuthorizationStateProtocol {
-    func login()
+    func login(_ login: String, _ password: String) async throws
     func logout()
     
     func unlockFaceId(_ status: Bool)
@@ -27,6 +27,12 @@ protocol AuthorizationServiceProtocol: AuthorizationStateProtocol {
 
 final class AuthorizationService: AuthorizationServiceProtocol {
     private let defaults = UserDefaults.standard
+    
+    private let authNetworkService: AuthNetworkProtocol
+    
+    init(authNetworkService: AuthNetworkProtocol) {
+        self.authNetworkService = authNetworkService
+    }
     
     var isAuthorized: Bool {
         get {
@@ -46,9 +52,12 @@ final class AuthorizationService: AuthorizationServiceProtocol {
         }
     }
     
-    func login() {
-        defaults.set(true, forKey: "isAuthorized")
-        NotificationCenter.default.post(name: .isAuthorizedChanged, object: nil)
+    func login(_ login: String, _ password: String) async throws {
+        let response = try await authNetworkService.authorize(login: login, password: password)
+        if response.access {
+            defaults.set(true, forKey: "isAuthorized")
+            NotificationCenter.default.post(name: .isAuthorizedChanged, object: nil)
+        }
     }
     
     func logout() {
