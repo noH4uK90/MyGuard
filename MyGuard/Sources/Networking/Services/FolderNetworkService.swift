@@ -34,7 +34,7 @@ final class FolderNetworkService: FolderNetworkProtocol {
             throw NetworkError.badURL
         }
         
-        let _: EmptyResponse = try await networkService.execute(for: url, .POST, nil)
+        try await networkService.execute(for: url, .POST, nil)
     }
     
     func deleteFolder(id: Int) async throws {
@@ -42,6 +42,6 @@ final class FolderNetworkService: FolderNetworkProtocol {
             throw NetworkError.badURL
         }
         
-        let _: EmptyResponse = try await networkService.execute(for: url, .DELETE, nil)
+        try await networkService.execute(for: url, .DELETE, nil)
     }
 }

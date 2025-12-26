@@ -4,6 +4,7 @@ import Foundation
 import NeedleFoundation
 import SwiftUI
 import UDFKit
+import UIKit
 
 // swiftlint:disable unused_declaration
 private let needleDependenciesHash : String? = nil
@@ -18,214 +19,303 @@ private func parent2(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
     return component.parent.parent
 }
 
+private func parent3(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Scope {
+    return component.parent.parent.parent
+}
+
 // MARK: - Providers
 
 #if !NEEDLE_DYNAMIC
 
-private class FolderNetworkDependencydcfba5bb04fba35f6290Provider: FolderNetworkDependency {
+private class FolderNetworkDependencya9da2bb55b41477e835bProvider: FolderNetworkDependency {
     var networkService: NetworkServiceProtocol {
-        return rootComponent.networkService
+        return appCoordinatorComponent.networkService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->FolderNetworkComponent
-private func factory9eb2d8c7977e8d710c25b3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return FolderNetworkDependencydcfba5bb04fba35f6290Provider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->FolderNetworkComponent
+private func factory846adb9fd23afaacae7f4fc5ad4103039915518d(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return FolderNetworkDependencya9da2bb55b41477e835bProvider(appCoordinatorComponent: parent2(component) as! AppCoordinatorComponent)
 }
-private class AuthNetworkDependencyd480d7035bf7579188d3Provider: AuthNetworkDependency {
+private class AuthNetworkDependency3d7c5c0debd9b4f3501cProvider: AuthNetworkDependency {
     var networkService: NetworkServiceProtocol {
-        return rootComponent.networkService
+        return appCoordinatorComponent.networkService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->AuthNetworkComponent
-private func factory155e798144e1cd1fceccb3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AuthNetworkDependencyd480d7035bf7579188d3Provider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->AuthNetworkComponent
+private func factory704bd77dddaf223a0a2bc386e62f508005d1a9a4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AuthNetworkDependency3d7c5c0debd9b4f3501cProvider(appCoordinatorComponent: parent1(component) as! AppCoordinatorComponent)
 }
-private class PasswordNetworkDependencyaf4a1349c36b1e778d69Provider: PasswordNetworkDependency {
+private class PasswordNetworkDependencyef36644195a28c1cdbadProvider: PasswordNetworkDependency {
     var networkService: NetworkServiceProtocol {
-        return rootComponent.networkService
+        return appCoordinatorComponent.networkService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->PasswordNetworkComponent
-private func factory75006564c7d7c8e05e5cb3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PasswordNetworkDependencyaf4a1349c36b1e778d69Provider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordNetworkComponent
+private func factorye07593c6e7a89220a39a4fc5ad4103039915518d(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PasswordNetworkDependencyef36644195a28c1cdbadProvider(appCoordinatorComponent: parent2(component) as! AppCoordinatorComponent)
 }
-private class AuthorizationServiceDependency7cabb9f03075fe481372Provider: AuthorizationServiceDependency {
+private class AuthorizationServiceDependencyf43638bbd0c307313470Provider: AuthorizationServiceDependency {
     var authNetworkService: AuthNetworkProtocol {
-        return rootComponent.authNetworkService
+        return appCoordinatorComponent.authNetworkService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->AuthorizationServiceComponent
-private func factorya33cbca5714df39a73d6b3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AuthorizationServiceDependency7cabb9f03075fe481372Provider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->AuthorizationServiceComponent
+private func factory35f81ac66616561eaab2c386e62f508005d1a9a4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AuthorizationServiceDependencyf43638bbd0c307313470Provider(appCoordinatorComponent: parent1(component) as! AppCoordinatorComponent)
 }
-private class NetworkServiceDependency029df3653966923d4a2bProvider: NetworkServiceDependency {
+private class NetworkServiceDependencya7764f7e9ad64f5457b2Provider: NetworkServiceDependency {
 
 
     init() {
 
     }
 }
-/// ^->RootComponent->NetworkServiceComponent
-private func factory135f53c453d8e7c03d43e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NetworkServiceDependency029df3653966923d4a2bProvider()
+/// ^->AppCoordinatorComponent->NetworkServiceComponent
+private func factorya6e135b14cbe9f5c5c05e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NetworkServiceDependencya7764f7e9ad64f5457b2Provider()
 }
-private class NavigationServiceDependencycb91f8e41c08e70d616dProvider: NavigationServiceDependency {
+private class NavigationServiceDependencyff20e798a13c483b9fffProvider: NavigationServiceDependency {
     var authorizationState: AuthorizationStateProtocol {
-        return rootComponent.authorizationState
+        return appCoordinatorComponent.authorizationState
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->NavigationServiceComponent
-private func factorye0c8ac25639f48c884dab3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return NavigationServiceDependencycb91f8e41c08e70d616dProvider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->NavigationServiceComponent
+private func factory466c7c085009a699f29fc386e62f508005d1a9a4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NavigationServiceDependencyff20e798a13c483b9fffProvider(appCoordinatorComponent: parent1(component) as! AppCoordinatorComponent)
 }
-private class RecoveryPasswordDependency5c3868a8b470ed39559cProvider: RecoveryPasswordDependency {
+private class RecoveryPasswordDependency99ca31a320798f4424bfProvider: RecoveryPasswordDependency {
 
 
     init() {
 
     }
 }
-/// ^->RootComponent->AuthComponent->RecoveryPasswordComponent
-private func factoryf97002da1394e2ecc1cee3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return RecoveryPasswordDependency5c3868a8b470ed39559cProvider()
+/// ^->AppCoordinatorComponent->AuthCoordinatorComponent->AuthComponent->RecoveryPasswordComponent
+private func factorycf73812a687ad76be24de3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return RecoveryPasswordDependency99ca31a320798f4424bfProvider()
 }
-private class AuthDependency72382e2b19321dcd0a99Provider: AuthDependency {
+private class AuthDependency1ed67e51d8e9e3406310Provider: AuthDependency {
     var authorizationService: AuthorizationServiceProtocol {
-        return rootComponent.authorizationService
+        return appCoordinatorComponent.authorizationService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->AuthComponent
-private func factoryfef8ce3e5d7a6687fadeb3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AuthDependency72382e2b19321dcd0a99Provider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->AuthCoordinatorComponent->AuthComponent
+private func factory763094bfd02ff8f917794fc5ad4103039915518d(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AuthDependency1ed67e51d8e9e3406310Provider(appCoordinatorComponent: parent2(component) as! AppCoordinatorComponent)
 }
-private class AddFolderDependencyd18b66ff89efa5a51fe1Provider: AddFolderDependency {
+private class AddFolderDependencyb83710b284879732edf2Provider: AddFolderDependency {
     var folderNetworkService: FolderNetworkProtocol {
-        return rootComponent.folderNetworkService
+        return rootCoordinatorComponent.folderNetworkService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let rootCoordinatorComponent: RootCoordinatorComponent
+    init(rootCoordinatorComponent: RootCoordinatorComponent) {
+        self.rootCoordinatorComponent = rootCoordinatorComponent
     }
 }
-/// ^->RootComponent->PasswordListComponent->AddFolderComponent
-private func factory069e68669e8bba48e413a9403e3301bb54f80df0(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AddFolderDependencyd18b66ff89efa5a51fe1Provider(rootComponent: parent2(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent->AddFolderComponent
+private func factory4ed722253b894b92b6f98ec9e8775e7a57ecc6c4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AddFolderDependencyb83710b284879732edf2Provider(rootCoordinatorComponent: parent2(component) as! RootCoordinatorComponent)
 }
-private class PasswordDetailDependency1bf52fe6a331b5244d78Provider: PasswordDetailDependency {
+private class PasswordDetailDependencyb779acec025fbadbb776Provider: PasswordDetailDependency {
     var passwordNetworkService: PasswordNetworkProtocol {
-        return rootComponent.passwordNetworkService
+        return rootCoordinatorComponent.passwordNetworkService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let rootCoordinatorComponent: RootCoordinatorComponent
+    init(rootCoordinatorComponent: RootCoordinatorComponent) {
+        self.rootCoordinatorComponent = rootCoordinatorComponent
     }
 }
-/// ^->RootComponent->PasswordListComponent->PasswordDetailComponent
-private func factorycd67a93efddee2c96a09a9403e3301bb54f80df0(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PasswordDetailDependency1bf52fe6a331b5244d78Provider(rootComponent: parent2(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent->PasswordDetailComponent
+private func factory57e14223c62da344d9b48ec9e8775e7a57ecc6c4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PasswordDetailDependencyb779acec025fbadbb776Provider(rootCoordinatorComponent: parent2(component) as! RootCoordinatorComponent)
 }
-private class AddPasswordDependency752d84851d8be185c5a5Provider: AddPasswordDependency {
+private class AddPasswordDependency2258c73f3ebd73e2db95Provider: AddPasswordDependency {
     var passwordNetworkService: PasswordNetworkProtocol {
-        return rootComponent.passwordNetworkService
+        return rootCoordinatorComponent.passwordNetworkService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let rootCoordinatorComponent: RootCoordinatorComponent
+    init(rootCoordinatorComponent: RootCoordinatorComponent) {
+        self.rootCoordinatorComponent = rootCoordinatorComponent
     }
 }
-/// ^->RootComponent->PasswordListComponent->AddPasswordComponent
-private func factorya87b0bd176589d7e0b68a9403e3301bb54f80df0(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AddPasswordDependency752d84851d8be185c5a5Provider(rootComponent: parent2(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent->AddPasswordComponent
+private func factory6ad3aec09a2d8d207c6e8ec9e8775e7a57ecc6c4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AddPasswordDependency2258c73f3ebd73e2db95Provider(rootCoordinatorComponent: parent2(component) as! RootCoordinatorComponent)
 }
-private class PasswordListDependencyee1d1413debe2e0252b4Provider: PasswordListDependency {
+private class PasswordListDependencycff52aa34fe776c60068Provider: PasswordListDependency {
     var folderNetworkService: FolderNetworkProtocol {
-        return rootComponent.folderNetworkService
+        return rootCoordinatorComponent.folderNetworkService
     }
     var passwordNetworkService: PasswordNetworkProtocol {
-        return rootComponent.passwordNetworkService
+        return rootCoordinatorComponent.passwordNetworkService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let rootCoordinatorComponent: RootCoordinatorComponent
+    init(rootCoordinatorComponent: RootCoordinatorComponent) {
+        self.rootCoordinatorComponent = rootCoordinatorComponent
     }
 }
-/// ^->RootComponent->PasswordListComponent
-private func factorycb949510ddf8531ca17fb3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PasswordListDependencyee1d1413debe2e0252b4Provider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent->PasswordListComponent
+private func factory5d2a22a51d2064eb2e3e8ec9e8775e7a57ecc6c4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PasswordListDependencycff52aa34fe776c60068Provider(rootCoordinatorComponent: parent2(component) as! RootCoordinatorComponent)
 }
-private class ProfileDependency6818e92e498fe07e2622Provider: ProfileDependency {
+private class PasswordCoordinatorDependencyfd8670741978a7ac69c8Provider: PasswordCoordinatorDependency {
+    var folderNetworkService: FolderNetworkProtocol {
+        return rootCoordinatorComponent.folderNetworkService
+    }
+    var passwordNetworkService: PasswordNetworkProtocol {
+        return rootCoordinatorComponent.passwordNetworkService
+    }
+    private let rootCoordinatorComponent: RootCoordinatorComponent
+    init(rootCoordinatorComponent: RootCoordinatorComponent) {
+        self.rootCoordinatorComponent = rootCoordinatorComponent
+    }
+}
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent
+private func factory0dbcefdc1d3c44b5907dc888c27dd85b8f4ce782(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PasswordCoordinatorDependencyfd8670741978a7ac69c8Provider(rootCoordinatorComponent: parent1(component) as! RootCoordinatorComponent)
+}
+private class AuthCoordinatorDependencycb64464a77cef7372209Provider: AuthCoordinatorDependency {
     var authorizationService: AuthorizationServiceProtocol {
-        return rootComponent.authorizationService
+        return appCoordinatorComponent.authorizationService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->ProfileComponent
-private func factory62ee3a75b16d091e8f01b3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ProfileDependency6818e92e498fe07e2622Provider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->AuthCoordinatorComponent
+private func factory2cc78d64316dbd0098f2c386e62f508005d1a9a4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AuthCoordinatorDependencycb64464a77cef7372209Provider(appCoordinatorComponent: parent1(component) as! AppCoordinatorComponent)
 }
-private class InputPassCodeDependency442cfba4bb98b874f2dbProvider: InputPassCodeDependency {
+private class ProfileCoordinatorDependencybfde7f2ea521c6973619Provider: ProfileCoordinatorDependency {
     var authorizationService: AuthorizationServiceProtocol {
-        return rootComponent.authorizationService
+        return appCoordinatorComponent.authorizationService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->InputPassCodeComponent
-private func factory36b6508c225fdf3e6d18b3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return InputPassCodeDependency442cfba4bb98b874f2dbProvider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->ProfileCoordinatorComponent
+private func factory0efbe3a728436fc0c98f4fc5ad4103039915518d(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ProfileCoordinatorDependencybfde7f2ea521c6973619Provider(appCoordinatorComponent: parent2(component) as! AppCoordinatorComponent)
 }
-private class CreatePassCodeDependency5c939347cc1679b8422bProvider: CreatePassCodeDependency {
+private class RootCoordinatorDependency8a925b848288b8dd5f0aProvider: RootCoordinatorDependency {
+    var networkService: NetworkServiceProtocol {
+        return appCoordinatorComponent.networkService
+    }
     var authorizationService: AuthorizationServiceProtocol {
-        return rootComponent.authorizationService
+        return appCoordinatorComponent.authorizationService
     }
-    private let rootComponent: RootComponent
-    init(rootComponent: RootComponent) {
-        self.rootComponent = rootComponent
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
     }
 }
-/// ^->RootComponent->CreatePassCodeComponent
-private func factoryb865d3d0442ff6a591b0b3a8f24c1d289f2c0f2e(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return CreatePassCodeDependency5c939347cc1679b8422bProvider(rootComponent: parent1(component) as! RootComponent)
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent
+private func factory7de6e71573705262afd9c386e62f508005d1a9a4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return RootCoordinatorDependency8a925b848288b8dd5f0aProvider(appCoordinatorComponent: parent1(component) as! AppCoordinatorComponent)
 }
-private class AnalyticsDependency8323670433b9d6f5982eProvider: AnalyticsDependency {
+private class AnalyticsCoordinatorDependencyea6e471acc97a9a0003eProvider: AnalyticsCoordinatorDependency {
 
 
     init() {
 
     }
 }
-/// ^->RootComponent->AnalyticsComponent
-private func factoryf526b52b541977f192efe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AnalyticsDependency8323670433b9d6f5982eProvider()
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->AnalyticsCoordinatorComponent
+private func factory528cb29ba8add31bc924e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AnalyticsCoordinatorDependencyea6e471acc97a9a0003eProvider()
+}
+private class ProfileDependency90ffc91518992861caeaProvider: ProfileDependency {
+    var authorizationService: AuthorizationServiceProtocol {
+        return appCoordinatorComponent.authorizationService
+    }
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
+    }
+}
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->ProfileCoordinatorComponent->ProfileComponent
+private func factory5558cbdae5c9fb2662e0e352693622dc6ffb4837(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ProfileDependency90ffc91518992861caeaProvider(appCoordinatorComponent: parent3(component) as! AppCoordinatorComponent)
+}
+private class RootDependencyc4ecd48694affef8e664Provider: RootDependency {
+    var authorizationService: AuthorizationServiceProtocol {
+        return appCoordinatorComponent.authorizationService
+    }
+    var navigationService: NavigationServiceProtocol {
+        return appCoordinatorComponent.navigationService
+    }
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
+    }
+}
+/// ^->AppCoordinatorComponent->RootComponent
+private func factory674570e2bde8c96e130ac386e62f508005d1a9a4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return RootDependencyc4ecd48694affef8e664Provider(appCoordinatorComponent: parent1(component) as! AppCoordinatorComponent)
+}
+private class InputPassCodeDependency078e011cd1e5ba0d9efdProvider: InputPassCodeDependency {
+    var authorizationService: AuthorizationServiceProtocol {
+        return appCoordinatorComponent.authorizationService
+    }
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
+    }
+}
+/// ^->AppCoordinatorComponent->InputPassCodeComponent
+private func factory075d5268ea1e6cbd518dc386e62f508005d1a9a4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return InputPassCodeDependency078e011cd1e5ba0d9efdProvider(appCoordinatorComponent: parent1(component) as! AppCoordinatorComponent)
+}
+private class CreatePassCodeDependencyfc38c7dc6110a0b59ca8Provider: CreatePassCodeDependency {
+    var authorizationService: AuthorizationServiceProtocol {
+        return appCoordinatorComponent.authorizationService
+    }
+    private let appCoordinatorComponent: AppCoordinatorComponent
+    init(appCoordinatorComponent: AppCoordinatorComponent) {
+        self.appCoordinatorComponent = appCoordinatorComponent
+    }
+}
+/// ^->AppCoordinatorComponent->CreatePassCodeComponent
+private func factoryd5ca23f8dffa81138c76c386e62f508005d1a9a4(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return CreatePassCodeDependencyfc38c7dc6110a0b59ca8Provider(appCoordinatorComponent: parent1(component) as! AppCoordinatorComponent)
+}
+private class AnalyticsDependency129b0001d6e22242cb9eProvider: AnalyticsDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppCoordinatorComponent->RootCoordinatorComponent->AnalyticsCoordinatorComponent->AnalyticsComponent
+private func factory2e18375c93c27635758ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AnalyticsDependency129b0001d6e22242cb9eProvider()
 }
 
 #else
@@ -289,6 +379,43 @@ extension PasswordListComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\PasswordListDependency.folderNetworkService] = "folderNetworkService-FolderNetworkProtocol"
         keyPathToName[\PasswordListDependency.passwordNetworkService] = "passwordNetworkService-PasswordNetworkProtocol"
+    }
+}
+extension PasswordCoordinatorComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\PasswordCoordinatorDependency.folderNetworkService] = "folderNetworkService-FolderNetworkProtocol"
+        keyPathToName[\PasswordCoordinatorDependency.passwordNetworkService] = "passwordNetworkService-PasswordNetworkProtocol"
+
+    }
+}
+extension AppCoordinatorComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
+
+    }
+}
+extension AuthCoordinatorComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\AuthCoordinatorDependency.authorizationService] = "authorizationService-AuthorizationServiceProtocol"
+
+    }
+}
+extension ProfileCoordinatorComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\ProfileCoordinatorDependency.authorizationService] = "authorizationService-AuthorizationServiceProtocol"
+
+    }
+}
+extension RootCoordinatorComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\RootCoordinatorDependency.networkService] = "networkService-NetworkServiceProtocol"
+        keyPathToName[\RootCoordinatorDependency.authorizationService] = "authorizationService-AuthorizationServiceProtocol"
+
+    }
+}
+extension AnalyticsCoordinatorComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
 
     }
 }
@@ -299,8 +426,8 @@ extension ProfileComponent: NeedleFoundation.Registration {
 }
 extension RootComponent: NeedleFoundation.Registration {
     public func registerItems() {
-
-
+        keyPathToName[\RootDependency.authorizationService] = "authorizationService-AuthorizationServiceProtocol"
+        keyPathToName[\RootDependency.navigationService] = "navigationService-NavigationServiceProtocol"
     }
 }
 extension InputPassCodeComponent: NeedleFoundation.Registration {
@@ -334,23 +461,30 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 #if !NEEDLE_DYNAMIC
 
 @inline(never) private func register1() {
-    registerProviderFactory("^->RootComponent->FolderNetworkComponent", factory9eb2d8c7977e8d710c25b3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->AuthNetworkComponent", factory155e798144e1cd1fceccb3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->PasswordNetworkComponent", factory75006564c7d7c8e05e5cb3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->AuthorizationServiceComponent", factorya33cbca5714df39a73d6b3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->NetworkServiceComponent", factory135f53c453d8e7c03d43e3b0c44298fc1c149afb)
-    registerProviderFactory("^->RootComponent->NavigationServiceComponent", factorye0c8ac25639f48c884dab3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->AuthComponent->RecoveryPasswordComponent", factoryf97002da1394e2ecc1cee3b0c44298fc1c149afb)
-    registerProviderFactory("^->RootComponent->AuthComponent", factoryfef8ce3e5d7a6687fadeb3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->PasswordListComponent->AddFolderComponent", factory069e68669e8bba48e413a9403e3301bb54f80df0)
-    registerProviderFactory("^->RootComponent->PasswordListComponent->PasswordDetailComponent", factorycd67a93efddee2c96a09a9403e3301bb54f80df0)
-    registerProviderFactory("^->RootComponent->PasswordListComponent->AddPasswordComponent", factorya87b0bd176589d7e0b68a9403e3301bb54f80df0)
-    registerProviderFactory("^->RootComponent->PasswordListComponent", factorycb949510ddf8531ca17fb3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->ProfileComponent", factory62ee3a75b16d091e8f01b3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent", factoryEmptyDependencyProvider)
-    registerProviderFactory("^->RootComponent->InputPassCodeComponent", factory36b6508c225fdf3e6d18b3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->CreatePassCodeComponent", factoryb865d3d0442ff6a591b0b3a8f24c1d289f2c0f2e)
-    registerProviderFactory("^->RootComponent->AnalyticsComponent", factoryf526b52b541977f192efe3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->FolderNetworkComponent", factory846adb9fd23afaacae7f4fc5ad4103039915518d)
+    registerProviderFactory("^->AppCoordinatorComponent->AuthNetworkComponent", factory704bd77dddaf223a0a2bc386e62f508005d1a9a4)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordNetworkComponent", factorye07593c6e7a89220a39a4fc5ad4103039915518d)
+    registerProviderFactory("^->AppCoordinatorComponent->AuthorizationServiceComponent", factory35f81ac66616561eaab2c386e62f508005d1a9a4)
+    registerProviderFactory("^->AppCoordinatorComponent->NetworkServiceComponent", factorya6e135b14cbe9f5c5c05e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppCoordinatorComponent->NavigationServiceComponent", factory466c7c085009a699f29fc386e62f508005d1a9a4)
+    registerProviderFactory("^->AppCoordinatorComponent->AuthCoordinatorComponent->AuthComponent->RecoveryPasswordComponent", factorycf73812a687ad76be24de3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppCoordinatorComponent->AuthCoordinatorComponent->RecoveryPasswordComponent", factorycf73812a687ad76be24de3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppCoordinatorComponent->AuthCoordinatorComponent->AuthComponent", factory763094bfd02ff8f917794fc5ad4103039915518d)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent->AddFolderComponent", factory4ed722253b894b92b6f98ec9e8775e7a57ecc6c4)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent->PasswordDetailComponent", factory57e14223c62da344d9b48ec9e8775e7a57ecc6c4)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent->AddPasswordComponent", factory6ad3aec09a2d8d207c6e8ec9e8775e7a57ecc6c4)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent->PasswordListComponent", factory5d2a22a51d2064eb2e3e8ec9e8775e7a57ecc6c4)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->PasswordCoordinatorComponent", factory0dbcefdc1d3c44b5907dc888c27dd85b8f4ce782)
+    registerProviderFactory("^->AppCoordinatorComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppCoordinatorComponent->AuthCoordinatorComponent", factory2cc78d64316dbd0098f2c386e62f508005d1a9a4)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->ProfileCoordinatorComponent", factory0efbe3a728436fc0c98f4fc5ad4103039915518d)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent", factory7de6e71573705262afd9c386e62f508005d1a9a4)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->AnalyticsCoordinatorComponent", factory528cb29ba8add31bc924e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->ProfileCoordinatorComponent->ProfileComponent", factory5558cbdae5c9fb2662e0e352693622dc6ffb4837)
+    registerProviderFactory("^->AppCoordinatorComponent->RootComponent", factory674570e2bde8c96e130ac386e62f508005d1a9a4)
+    registerProviderFactory("^->AppCoordinatorComponent->InputPassCodeComponent", factory075d5268ea1e6cbd518dc386e62f508005d1a9a4)
+    registerProviderFactory("^->AppCoordinatorComponent->CreatePassCodeComponent", factoryd5ca23f8dffa81138c76c386e62f508005d1a9a4)
+    registerProviderFactory("^->AppCoordinatorComponent->RootCoordinatorComponent->AnalyticsCoordinatorComponent->AnalyticsComponent", factory2e18375c93c27635758ae3b0c44298fc1c149afb)
 }
 #endif
 

@@ -23,7 +23,7 @@ struct AuthReducer: Reducer, Sendable {
     
     @ThreadSafe var dependency: AuthDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, Never> {
         switch action {
             case let .textChange(keyPath, text):
                 state[keyPath: keyPath] = text
@@ -32,11 +32,11 @@ struct AuthReducer: Reducer, Sendable {
                 let email = state.email
                 let password = state.password
                 
-                return .run { send in
+                return .init(effect: .run { send in
                     try await login(email: email, password: password)
-                }
+                })
         }
-        return .none
+        return .init(effect: .none)
     }
     
     func login(email: String, password: String) async throws {

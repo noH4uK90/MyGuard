@@ -36,7 +36,7 @@ final class PasswordNetworkService: PasswordNetworkProtocol {
             throw NetworkError.badURL
         }
         
-        let _: EmptyResponse = try await networkService.execute(for: url, .POST, nil)
+        try await networkService.execute(for: url, .POST, nil)
     }
     
     func updatePassword(password: PasswordRequest) async throws {
@@ -44,7 +44,7 @@ final class PasswordNetworkService: PasswordNetworkProtocol {
             throw NetworkError.badURL
         }
         
-        let _: EmptyResponse = try await networkService.execute(for: url, .PUT, nil)
+        try await networkService.execute(for: url, .PUT, nil)
     }
     
     func deletePassword(id: Int) async throws {
@@ -52,7 +52,7 @@ final class PasswordNetworkService: PasswordNetworkProtocol {
             throw NetworkError.badURL
         }
         
-        let _: EmptyResponse = try await networkService.execute(for: url, .DELETE, nil)
+        try await networkService.execute(for: url, .DELETE, nil)
     }
     
 }

@@ -12,7 +12,7 @@ struct RootView<
     Auth: ViewsBuilder,
     Analytics: ViewsBuilder,
     Profile: ViewsBuilder,
-    PasswordList: ViewsBuilder,
+    PasswordFlow: ViewsBuilder,
     InputPassCode: ViewsBuilder,
     CreatePassCode: ViewsBuilder
 >: View {
@@ -24,7 +24,7 @@ struct RootView<
     var authBuilder: Auth
     var analyticsBuilder: Analytics
     var profileBuilder: Profile
-    var passwordListBuilder: PasswordList
+    var passwordFlowBuilder: PasswordFlow
     var inputPassCodeBuilder: InputPassCode
     var createPassCodeBuilder: CreatePassCode
 
@@ -69,10 +69,10 @@ struct RootView<
     var modernTabView: some View {
         TabView {
             Tab("passwordTabTitle", systemImage: "key.shield", role: .search) {
-                NavigationStack {
-                    passwordListBuilder.view
+//                NavigationStack {
+                    passwordFlowBuilder.view
                         .searchable(text: $searchText)
-                }
+//                }
             }
 
             Tab("profileTabTitle", systemImage: "person.circle") {
@@ -93,10 +93,10 @@ struct RootView<
     // MARK: - Legacy TabView
     var legacyTabView: some View {
         TabView {
-            NavigationStack {
-                passwordListBuilder.view
+//            NavigationStack {
+                passwordFlowBuilder.view
                     .searchable(text: $searchText)
-            }
+//            }
             .tabItem {
                 Label("passwordTabTitle", systemImage: "key")
                     .symbolVariant(.circle)

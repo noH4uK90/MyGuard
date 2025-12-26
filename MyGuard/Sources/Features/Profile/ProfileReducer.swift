@@ -20,12 +20,12 @@ struct ProfileReducer: Reducer, Sendable {
     
     @ThreadSafe var dependency: ProfileDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, Never> {
         switch action {
             case .logout:
                 dependency.authorizationService.logout()
         }
         
-        return .none
+        return .init(effect: .none)
     }
 }

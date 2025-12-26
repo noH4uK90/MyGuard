@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FolderRequest: Codable {
+struct FolderRequest: Codable, Equatable {
     let name: String
     let parentId: String
 }

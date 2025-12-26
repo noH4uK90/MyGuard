@@ -9,8 +9,6 @@ import SwiftUI
 import UDFKit
 
 struct PasswordDetailView: View {
-    
-    @Environment(\.dismiss) var dismiss
 
     @ObservedObject var store: StoreOf<PasswordDetailReducer>
 
@@ -62,10 +60,10 @@ struct PasswordDetailView: View {
                         set: { _, _ in store.send(.deleteOnTap) })
                 ) {
                     Button("deleteConfirmationDialogDelete", role: .destructive) {
-                        store.send(.deleteConfirmationOnTap(true, dismiss()))
+                        store.send(.deleteConfirmationOnTap(true))
                     }
                     Button("deleteConfirmationDialogKeep", role: .cancel) {
-                        store.send(.deleteConfirmationOnTap(false, dismiss()))
+                        store.send(.deleteConfirmationOnTap(false))
                     }
                 }
             }

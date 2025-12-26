@@ -9,27 +9,14 @@ import NeedleFoundation
 import SwiftUI
 import UDFKit
 
-@MainActor
-final class PasswordListComponent: Component<PasswordListDependency>, ViewsBuilder {
+final class PasswordListComponent: Component<PasswordListDependency> {
     
-    var store: StoreOf<PasswordListReducer> {
+    lazy var store: StoreOf<PasswordListReducer> = {
         let safeDependency = ThreadSafe(dependency!)
         return Store(state: PasswordListReducer.State(), reducer: PasswordListReducer(dependency: safeDependency))
-    }
+    }()
     
-    var view: some View {
-        PasswordListView(store: store, detailBuilder: detailPasswordComponent, addPBuilder: addPasswordComponent, addFBuilder: addFolderComponent)
-    }
-    
-    var detailPasswordComponent: PasswordDetailComponent {
-        PasswordDetailComponent(parent: self)
-    }
-    
-    var addPasswordComponent: AddPasswordComponent {
-        AddPasswordComponent(parent: self)
-    }
-    
-    var addFolderComponent: AddFolderComponent {
-        AddFolderComponent(parent: self)
+    func view(store: StoreOf<PasswordListReducer>) -> some View {
+        PasswordListView(store: store)
     }
 }

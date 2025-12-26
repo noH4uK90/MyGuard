@@ -20,12 +20,12 @@ struct AnalyticsReducer: Reducer, Sendable {
     
     @ThreadSafe var dependency: AnalyticsDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, Never> {
         switch action {
                 
         }
         
-        return .none
+        return .init(effect: .none)
     }
     
 }

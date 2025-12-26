@@ -8,6 +8,10 @@
 import Foundation
 import UDFKit
 
+enum PasswordDetailAction: Equatable {
+    case deleteRequested(Int)
+}
+
 struct PasswordDetailReducer: Reducer, Sendable {
     
     enum UIState { case loading, detail, editing }
@@ -16,7 +20,6 @@ struct PasswordDetailReducer: Reducer, Sendable {
         var draft: PasswordDetail
         var canSave: Bool = true
         var uiState: UIState = .loading
-        var isDeleted: Bool = false
         
         var isShowingCancelConfirmation: Bool = false
         var isShowingDeleteConfirmation: Bool = false
@@ -51,22 +54,21 @@ struct PasswordDetailReducer: Reducer, Sendable {
         case cancelConfirmationOnTap(Bool)
         
         case deleteOnTap
-        case deleteConfirmationOnTap(Bool, @Sendable @autoclosure () -> Void)
-        case deleteConfirmed
+        case deleteConfirmationOnTap(Bool)
     }
     
     @ThreadSafe var dependency: PasswordDetailDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, PasswordDetailAction> {
         switch action {
             case .load:
                 state.uiState = .loading
                 state.changeBackup(to: state.draft)
                 let passwordId = state.draft.id
-                return .run { send in
+                return .init(effect: .run { send in
                     let detail = try await getPasswordDetail(with: passwordId)
                     await send(.loaded(detail))
-                }
+                })
             case let .loaded(detail):
                 state.draft = detail
                 state.uiState = .detail
@@ -79,10 +81,10 @@ struct PasswordDetailReducer: Reducer, Sendable {
                     state.uiState = .detail
                 } else {
                     let password = state.draft
-                    return .run { send in
+                    return .init(effect: .run { send in
                         try await updatePasswordDetail(password)
                         await send(.saved)
-                    }
+                    })
                 }
             case .saved:
                 state.changeBackup(to: state.draft)
@@ -110,31 +112,18 @@ struct PasswordDetailReducer: Reducer, Sendable {
 
             case .deleteOnTap:
                 state.isShowingDeleteConfirmation.toggle()
-            case let .deleteConfirmationOnTap(isConfirmed, dismiss):
+            case let .deleteConfirmationOnTap(isConfirmed):
                 if isConfirmed {
-                    let passwordId = state.draft.id
-                    return .run { send in
-                        try await deletePasswordDetail(with: passwordId, dismiss())
-                        await send(.deleteConfirmed)
-                    }
+                    state.isShowingDeleteConfirmation = false
+                    return .init(effect: .none, output: .deleteRequested(state.draft.id))
                 }
                 state.isShowingDeleteConfirmation = false
-            case .deleteConfirmed:
-                state.isShowingDeleteConfirmation = false
-                state.isDeleted = true
         }
-        return .none
+        return .init(effect: .none)
     }
     
     private func getPasswordDetail(with id: Int) async throws -> PasswordDetail {
         try await dependency.passwordNetworkService.getPasswordDetail(id: id)
-    }
-    
-    private func deletePasswordDetail(with id: Int, _ dismiss: @Sendable @autoclosure @escaping () -> Void) async throws {
-        await MainActor.run {
-            dismiss()
-        }
-        try await dependency.passwordNetworkService.deletePassword(id: id)
     }
     
     private func updatePasswordDetail(_ passwordDetail: PasswordDetail) async throws {

@@ -20,11 +20,11 @@ struct RecoveryPasswordReducer: Reducer, Sendable {
     
     @ThreadSafe var dependency: RecoveryPasswordDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, Never> {
         switch action {
                 
         }
         
-        return .none
+        return .init(effect: .none)
     }
 }

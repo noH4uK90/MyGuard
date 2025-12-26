@@ -7,7 +7,7 @@ let project = Project(
     packages: [
         .remote(url: "https://github.com/uber/needle", requirement: .exact("0.25.1")),
         .remote(url: "https://github.com/apple/swift-async-algorithms", requirement: .upToNextMinor(from: "1.0.4")),
-        .remote(url: "https://github.com/noH4uK90/UDFKit", requirement: .exact("0.1.1"))
+        .remote(url: "https://github.com/noH4uK90/UDFKit", requirement: .exact("0.1.2"))
     ],
     targets: [
         .target(

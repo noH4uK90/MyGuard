@@ -8,6 +8,10 @@
 import Foundation
 import UDFKit
 
+enum AddPasswordAction: Equatable {
+    case addPasswordRequest(PasswordDetail)
+}
+
 struct AddPasswordReducer: Reducer, Sendable {
     
     struct State {
@@ -17,21 +21,19 @@ struct AddPasswordReducer: Reducer, Sendable {
     
     enum Action {
         case load
-        case save(_ dismiss: @Sendable @autoclosure () -> Void)
+        case save
         case draftChange(keyPath: WritableKeyPath<PasswordDetail, String>, String)
     }
     
     @ThreadSafe var dependency: AddPasswordDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, AddPasswordAction> {
         switch action {
             case .load:
                 break
-            case let .save(dismiss):
+            case .save:
                 let draft = state.draft
-                return .run { send in
-                    try await save(password: draft, dismiss())
-                }
+                return .init(effect: .none, output: .addPasswordRequest(draft))
             case let .draftChange(keyPath, text):
                 state.draft[keyPath: keyPath] = text
                 state.canSave =
@@ -40,14 +42,6 @@ struct AddPasswordReducer: Reducer, Sendable {
                     && state.draft.login.count <= 300
                     && state.draft.password.count >= 8
         }
-        return .none
-    }
-    
-    private func save(password: PasswordDetail, _ dismiss: @Sendable @autoclosure @escaping () -> Void) async throws {
-        let passwordRequest = password.toRequest()
-        try await dependency.passwordNetworkService.addPassword(password: passwordRequest)
-        await MainActor.run {
-            dismiss()
-        }
+        return .init(effect: .none)
     }
 }

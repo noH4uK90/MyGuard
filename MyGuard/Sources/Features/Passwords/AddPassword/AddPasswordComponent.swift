@@ -9,20 +9,19 @@ import NeedleFoundation
 import SwiftUI
 import UDFKit
 
-final class AddPasswordComponent: Component<AddPasswordDependency>, AddPasswordBuilder {
+final class AddPasswordComponent: Component<AddPasswordDependency> {
     
     func store(folderId: Int) -> StoreOf<AddPasswordReducer> {
         let safeDependency = ThreadSafe(dependency!)
         return Store(state: AddPasswordReducer.State(draft: .emptyWithFolderId(folderId)), reducer: AddPasswordReducer(dependency: safeDependency))
     }
     
-    func view(_ folderId: Int) -> some View {
-        AddPasswordView(store: store(folderId: folderId))
+    func view(store: StoreOf<AddPasswordReducer>) -> some View {
+        AddPasswordView(store: store)
     }
 }
 
-@MainActor
-protocol AddPasswordBuilder: Sendable {
+protocol AddPasswordBuilder {
     associatedtype ContentType: View
     
     @ViewBuilder func view(_ folderId: Int) -> ContentType

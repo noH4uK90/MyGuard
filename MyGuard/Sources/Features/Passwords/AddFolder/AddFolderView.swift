@@ -18,7 +18,7 @@ struct AddFolderView: View {
         Form {
             Section {
                 HStack {
-                    Text("nameTextTitle")
+                    Text(String(localized: "nameTextTitle"))
                     
                     Spacer()
                     
@@ -32,15 +32,15 @@ struct AddFolderView: View {
         .disableSwipeBack()
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button("cancleButtonTitle") {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("cancelButtonTitle") {
                     dismiss()
                 }
             }
             
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .confirmationAction) {
                 Button("saveButtonTitle") {
-                    store.send(.save(dismiss()))
+                    store.send(.save)
                 }
                 .disabled(!store.canSave)
             }

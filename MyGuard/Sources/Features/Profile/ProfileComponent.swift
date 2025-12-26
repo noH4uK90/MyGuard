@@ -9,14 +9,14 @@ import NeedleFoundation
 import SwiftUI
 import UDFKit
 
-final class ProfileComponent: Component<ProfileDependency>, ViewsBuilder {
+final class ProfileComponent: Component<ProfileDependency> {
     
     var store: Store<ProfileReducer> {
         let safeDependency = ThreadSafe(dependency!)
         return Store(state: ProfileReducer.State(), reducer: ProfileReducer(dependency: safeDependency))
     }
     
-    var view: some View {
+    func view(store: Store<ProfileReducer>) -> some View {
         ProfileView(store: store)
     }
 }

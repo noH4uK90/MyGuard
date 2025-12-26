@@ -8,6 +8,10 @@
 import Foundation
 import UDFKit
 
+enum AddFolderAction: Equatable {
+    case addFolderRequest(FolderRequest)
+}
+
 struct AddFolderReducer: Reducer, Sendable {
     
     struct State {
@@ -19,31 +23,22 @@ struct AddFolderReducer: Reducer, Sendable {
     enum Action {
         case changeName(String)
         
-        case save(@Sendable @autoclosure () -> Void)
+        case save
     }
     
     @ThreadSafe var dependency: AddFolderDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, AddFolderAction> {
         switch action {
             case let .changeName(name):
                 state.name = name
                 state.canSave = !name.isEmpty
                 
-            case let .save(dismiss):
+            case .save:
                 let id = state.id
                 let name = state.name
-                return .run { send in
-                    try await addFolder(with: name, for: id, dismiss())
-                }
+                return .init(effect: .none, output: .addFolderRequest(.init(name: name, parentId: "\(id)")))
         }
-        return .none
-    }
-    
-    func addFolder(with name: String, for id: Int, _ dismiss: @Sendable @autoclosure @escaping () -> Void) async throws {
-        try await dependency.folderNetworkService.addFolder(folder: .init(name: name, parentId: "\(id)"))
-        await MainActor.run {
-            dismiss()
-        }
+        return .init(effect: .none)
     }
 }

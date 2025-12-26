@@ -8,13 +8,9 @@
 import SwiftUI
 import UDFKit
 
-struct PasswordListView<DetailBuilder: PasswordDetailBuilder, AddPBuilder: AddPasswordBuilder, AddFBuilder: AddFolderBuilder>: View {
+struct PasswordListView: View {
         
     @ObservedObject var store: StoreOf<PasswordListReducer>
-    
-    var detailBuilder: DetailBuilder
-    var addPBuilder: AddPBuilder
-    var addFBuilder: AddFBuilder
     
     var body: some View {
         List {
@@ -59,13 +55,14 @@ struct PasswordListView<DetailBuilder: PasswordDetailBuilder, AddPBuilder: AddPa
     func folderView(_ folder: Folder) -> some View {
         Group {
             if folder.children == nil {
-                NavigationLink(destination: detailBuilder.view(Int(folder.id)!).toolbar(.hidden, for: .tabBar), label: {
-                    HStack {
-                        Image(systemName: "key.fill")
-                            .foregroundStyle(.placeholder)
-                        Text(folder.name)
-                    }
-                })
+                HStack {
+                    Image(systemName: "key.fill")
+                        .foregroundStyle(.placeholder)
+                    Text(folder.name)
+                }
+                .onTapGesture {
+                    store.send(.openDetail(Int(folder.id)!))
+                }
             } else {
                 HStack {
                     Image(systemName: "folder.fill")
@@ -78,15 +75,17 @@ struct PasswordListView<DetailBuilder: PasswordDetailBuilder, AddPBuilder: AddPa
     
     @ViewBuilder
     func addButtons(_ folderId: Int) -> some View {
-        NavigationLink(destination: {
-            addFBuilder.view(folderId)
-                .toolbar(.hidden, for: .tabBar)
-        }, label: { Label("addFolderButtonTitle", systemImage: "folder.badge.plus") })
+        Button {
+            store.send(.openAddFolderForm(folderId))
+        } label: {
+            Label(NSLocalizedString("addFolderButton", comment: "Add folder button"), systemImage: "folder.badge.plus")
+        }
         
-        NavigationLink(destination: {
-            addPBuilder.view(folderId)
-                .toolbar(.hidden, for: .tabBar)
-        }, label: { Label("addPasswordButtonTitle", systemImage: "key") })
+        Button {
+            store.send(.openAddPasswordForm(folderId))
+        } label: {
+            Label(String(localized: "addPasswordButton"), systemImage: "key")
+        }
     }
     
     

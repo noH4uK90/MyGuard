@@ -9,20 +9,19 @@ import NeedleFoundation
 import SwiftUI
 import UDFKit
 
-final class AddFolderComponent: Component<AddFolderDependency>, AddFolderBuilder {
+final class AddFolderComponent: Component<AddFolderDependency> {
     
     func store(folderId: Int) -> Store<AddFolderReducer> {
         let safeDependency = ThreadSafe(dependency!)
         return Store(state: AddFolderReducer.State(id: folderId), reducer: AddFolderReducer(dependency: safeDependency))
     }
     
-    func view(_ folderId: Int) -> some View {
-        AddFolderView(store: store(folderId: folderId))
+    func view(store: Store<AddFolderReducer>) -> some View {
+        AddFolderView(store: store)
     }
 }
 
-@MainActor
-protocol AddFolderBuilder: Sendable {
+protocol AddFolderBuilder {
     associatedtype ContentType: View
     
     @ViewBuilder func view(_ folderId: Int) -> ContentType

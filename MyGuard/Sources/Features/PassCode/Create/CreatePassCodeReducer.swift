@@ -25,7 +25,7 @@ struct CreatePassCodeReducer: Reducer, Sendable {
     
     @ThreadSafe var dependency: CreatePassCodeDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, Never> {
         switch action {
             case let .changePassCode(keyPath, text):
                 state[keyPath: keyPath] = text
@@ -39,6 +39,6 @@ struct CreatePassCodeReducer: Reducer, Sendable {
                 dependency.authorizationService.createPassCode(state.passCode)
         }
         
-        return .none
+        return .init(effect: .none)
     }
 }

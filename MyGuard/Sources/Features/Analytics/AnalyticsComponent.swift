@@ -9,14 +9,14 @@ import NeedleFoundation
 import SwiftUI
 import UDFKit
 
-final class AnalyticsComponent: Component<AnalyticsDependency>, ViewsBuilder {
+final class AnalyticsComponent: Component<AnalyticsDependency> {
     
     var store: Store<AnalyticsReducer> {
         let safeDependency = ThreadSafe(dependency!)
         return Store(state: AnalyticsReducer.State(), reducer: AnalyticsReducer(dependency: safeDependency))
     }
     
-    var view: some View {
+    func view(store: Store<AnalyticsReducer>) -> some View {
         AnalyticsView()
     }
     

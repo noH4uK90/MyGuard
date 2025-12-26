@@ -14,8 +14,13 @@ protocol NetworkServiceProtocol: Sendable {
     func execute<TResult>(for url: URL, _ method: HTTPMethod, _ headers: Headers?) async throws -> TResult
         where TResult: Decodable
     
+    func execute(for url: URL, _ method: HTTPMethod, _ headers: Headers?) async throws
+    
     func execute<TResult, TBody>(for url: URL, with body: TBody, _ method: HTTPMethod, _ headers: Headers?) async throws -> TResult
         where TResult: Decodable, TBody: Encodable
+    
+    func execute<TBody>(for url: URL, with body: TBody, _ method: HTTPMethod, _ headers: Headers?) async throws
+        where TBody: Encodable
 }
 
 final class NetworkService: NetworkServiceProtocol {
@@ -37,17 +42,14 @@ final class NetworkService: NetworkServiceProtocol {
         let (data, response) = try await session.data(for: request)
         try handleError(response)
         
-        print("\n\n\n\(response)\n\n\n")
+        return try JSONDecoder().decode(TResult.self, from: data)
+    }
+    
+    func execute(for url: URL, _ method: HTTPMethod, _ headers: Headers? = nil) async throws {
+        let request = createRequest(for: url, method)
         
-        if data.isEmpty {
-            if let empty = EmptyResponse() as? TResult {
-                return empty
-            } else {
-                throw URLError(.zeroByteResource)
-            }
-        } else {
-            return try JSONDecoder().decode(TResult.self, from: data)
-        }
+        let (_, response) = try await session.data(for: request)
+        try handleError(response)
     }
     
     func execute<TResult, TBody>(for url: URL, with body: TBody, _ method: HTTPMethod, _ headers: Headers? = nil) async throws -> TResult
@@ -59,15 +61,17 @@ final class NetworkService: NetworkServiceProtocol {
         let (data, response) = try await session.data(for: request)
         try handleError(response)
         
-        if data.isEmpty {
-            if let empty = EmptyResponse() as? TResult {
-                return empty
-            } else {
-                throw URLError(.zeroByteResource)
-            }
-        } else {
-            return try JSONDecoder().decode(TResult.self, from: data)
-        }
+        return try JSONDecoder().decode(TResult.self, from: data)
+    }
+    
+    func execute<TBody>(for url: URL, with body: TBody, _ method: HTTPMethod, _ headers: Headers? = nil) async throws
+        where TBody : Encodable
+    {
+        let bodyData = try JSONEncoder().encode(body)
+        let request = createRequest(for: url, with: bodyData, method)
+        
+        let (_, response) = try await session.data(for: request)
+        try handleError(response)
     }
     
 }

@@ -9,11 +9,6 @@ import Foundation
 import UDFKit
 import NeedleFoundation
 
-protocol RootDependency {
-    var authorizationService: AuthorizationServiceProtocol { get }
-    var navigationService: NavigationServiceProtocol { get }
-}
-
 struct RootReducer: Reducer, Sendable {
     
     enum UIState {
@@ -88,7 +83,7 @@ struct RootReducer: Reducer, Sendable {
     
     @ThreadSafe var dependency: RootDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, Never> {
         switch action {
             case .onAppear:
                 let isAuthorized = dependency.authorizationService.isAuthorized
@@ -110,11 +105,11 @@ struct RootReducer: Reducer, Sendable {
                 dependency.authorizationService.createPassCode(passCode)
         }
         
-        return .none
+        return .init(effect: .none)
     }
     
-    private func observeAll() -> Effect<Action> {
-        .run { send in
+    private func observeAll() -> ReducerResult<Action, Never> {
+        .init(effect: .run { send in
             async let auth: Void = {
                 for await _ in NotificationCenter.default.notifications(named: .isAuthorizedChanged) {
                     let authState = dependency.authorizationService.isAuthorized
@@ -140,6 +135,6 @@ struct RootReducer: Reducer, Sendable {
             }()
             
             _ = await (auth, unlock, pass)
-        }
+        })
     }
 }

@@ -9,21 +9,19 @@ import NeedleFoundation
 import SwiftUI
 import UDFKit
 
-@MainActor
-final class PasswordDetailComponent: Component<PasswordDetailDependency>, PasswordDetailBuilder {
+final class PasswordDetailComponent: Component<PasswordDetailDependency> {
     
     func store(id: Int) -> StoreOf<PasswordDetailReducer> {
         let safeDependency = ThreadSafe(dependency!)
         return Store(state: PasswordDetailReducer.State(draft: .emptyWithPasswordId(id)), reducer: PasswordDetailReducer(dependency: safeDependency))
     }
     
-    func view(_ id: Int) -> some View {
-        PasswordDetailView(store: store(id: id))
+    func view(store: StoreOf<PasswordDetailReducer>) -> some View {
+        PasswordDetailView(store: store)
     }
 }
 
-@MainActor
-protocol PasswordDetailBuilder: Sendable {
+protocol PasswordDetailBuilder {
     associatedtype ContentType: View
     
     @ViewBuilder func view(_ id: Int) -> ContentType

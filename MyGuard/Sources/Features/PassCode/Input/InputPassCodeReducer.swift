@@ -35,7 +35,7 @@ struct InputPassCodeReducer: Reducer, Sendable {
     
     @ThreadSafe var dependency: InputPassCodeDependency
     
-    func reduce(_ state: inout State, action: Action) -> Effect<Action> {
+    func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, Never> {
         switch action {
             case let .insert(digit):
                 if state.passCode.count < state.maxDigits {
@@ -47,17 +47,17 @@ struct InputPassCodeReducer: Reducer, Sendable {
                         state.isError = true
                         state.passCode = ""
                         state.shakeAttempts += 1
-                        return .run { send in
+                        return .init(effect: .run { send in
                             try await Task.sleep(for: .milliseconds(600))
                             await send(.changeError(false))
-                        }
+                        })
                     }
                 }
             case .delete:
                 if state.passCode.isEmpty {
-                    return .run { send in
+                    return .init(effect: .run { send in
                         await send(.enterWithBiometry)
-                    }
+                    })
                 } else {
                     state.passCode.removeLast()
                 }
@@ -69,7 +69,7 @@ struct InputPassCodeReducer: Reducer, Sendable {
                 var error: NSError?
                 guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
                     print("Cannot evaluate: \(error?.localizedDescription ?? "Unknown error")")
-                    return .none
+                    return .init(effect: .none)
                 }
                 
                 let reason = context.biometryType == .faceID ? "Face ID" : "Touch ID"
@@ -84,6 +84,6 @@ struct InputPassCodeReducer: Reducer, Sendable {
                 state.isError = isError
         }
         
-        return .none
+        return .init(effect: .none)
     }
 }

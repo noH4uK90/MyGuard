@@ -26,15 +26,15 @@ struct AddPasswordView: View {
         .disableSwipeBack()
         .navigationBarBackButtonHidden()
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
+            ToolbarItem(placement: .cancellationAction) {
                 Button("cancelButtonTitle") {
                     dismiss()
                 }
             }
             
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .confirmationAction) {
                 Button("saveButtonTitle") {
-                    store.send(.save(dismiss()))
+                    store.send(.save)
                 }
                 .disabled(!store.canSave)
             }
