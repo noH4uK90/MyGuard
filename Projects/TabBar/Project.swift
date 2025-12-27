@@ -32,7 +32,10 @@ let project = Project(
                 else
                     echo "warning: Needle not installed, download from https://github.com/uber/needle using Homebrew"
                 fi
-                """, name: "TabBar Needle Generator")
+                """, name: "TabBar Needle Generator",
+                     inputPaths: ["$(SRCROOT)/Projects/TabBar/Sources/**"],
+                     outputPaths: ["$(SRCROTT)/Projects/TabBar/Sources/Generator/NeedleGenerated.swift"]
+                    )
             ],
             dependencies: [
                 .package(product: "NeedleFoundation", type: .runtime, condition: .none),

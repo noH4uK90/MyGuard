@@ -32,7 +32,10 @@ let project = Project(
                 else
                     echo "warning: Needle not installed, download from https://github.com/uber/needle using Homebrew"
                 fi
-                """, name: "Auth Needle Generator")
+                """, name: "Auth Needle Generator",
+                     inputPaths: ["$(SRCROOT)/Projects/Auth/Sources/**"],
+                     outputPaths: ["$(SRCROTT)/Projects/Auth/Sources/Generator/NeedleGenerated.swift"]
+                    )
             ],
             dependencies: [
                 .package(product: "NeedleFoundation", type: .runtime, condition: .none),
