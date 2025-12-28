@@ -36,13 +36,13 @@ final class AppObserver {
         }
         .store(in: &cancellables)
         
-        NotificationCenter.default.publisher(
-            for: UIApplication.didBecomeActiveNotification
-        )
-        .sink { [weak self] _ in
-            self?.store.send(.changeAppPhase)
-        }
-        .store(in: &cancellables)
+//        NotificationCenter.default.publisher(
+//            for: UIApplication.didBecomeActiveNotification
+//        )
+//        .sink { [weak self] _ in
+//            self?.store.send(.changeAppPhase)
+//        }
+//        .store(in: &cancellables)
         
         store.$state
             .map(\.uiState)

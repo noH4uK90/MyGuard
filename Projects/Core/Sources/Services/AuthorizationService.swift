@@ -11,6 +11,7 @@ public protocol AuthorizationStateProtocol {
     var isAuthorized: Bool { get }
     var isUnlocked: Bool { get }
     var hasPassCode: Bool { get }
+    var isFaceIdAvailable: Bool { get }
 }
 
 public protocol AuthorizationServiceProtocol: AuthorizationStateProtocol {
@@ -23,6 +24,8 @@ public protocol AuthorizationServiceProtocol: AuthorizationStateProtocol {
     
     func createPassCode(_ passCode: String)
     func removePassCode()
+    
+    func accessFaceId(_ status: Bool)
 }
 
 internal final class AuthorizationService: AuthorizationServiceProtocol {
@@ -52,6 +55,12 @@ internal final class AuthorizationService: AuthorizationServiceProtocol {
         }
     }
     
+    var isFaceIdAvailable: Bool {
+        get {
+            defaults.bool(forKey: "isFaceIdAvailable")
+        }
+    }
+    
     func login(_ login: String, _ password: String) async throws {
         let response = try await authNetworkService.authorize(login: login, password: password)
         if response.access {
@@ -69,12 +78,14 @@ internal final class AuthorizationService: AuthorizationServiceProtocol {
     
     func unlockFaceId(_ status: Bool) {
         if status == true {
+            print("FaceID is unlocked: \(status)")
             defaults.set(true, forKey: "isUnlocked")
             NotificationCenter.default.post(name: .isUnlockedChanged, object: nil)
         }
     }
     
     func unlock(_ passCode: String) -> Bool {
+        print("Handle unlock")
         let storedPassCode = SecureStorage.shared.getPassword(for: "passCode") ?? ""
         
         guard passCode == storedPassCode else {
@@ -86,6 +97,7 @@ internal final class AuthorizationService: AuthorizationServiceProtocol {
     }
     
     func lock() {
+        print("Handle lock")
         defaults.set(false, forKey: "isUnlocked")
         NotificationCenter.default.post(name: .isUnlockedChanged, object: nil)
     }
@@ -101,6 +113,10 @@ internal final class AuthorizationService: AuthorizationServiceProtocol {
         SecureStorage.shared.deletePassword(for: "passCode")
         defaults.set(false, forKey: "hasPassCode")
         NotificationCenter.default.post(name: .hasPassCodeChanged, object: nil)
+    }
+    
+    func accessFaceId(_ status: Bool) {
+        defaults.set(status, forKey: "isFaceIdAvailable")
     }
     
 }

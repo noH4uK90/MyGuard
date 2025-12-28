@@ -14,6 +14,7 @@ struct InputPassCodeReducer: Reducer, Sendable {
     
     struct State {
         var passCode: String = ""
+        var biometryAvailable: Bool = false
         var biometryType: LABiometryType
         var maxDigits: Int { get { 6 } }
         var isError: Bool = false
@@ -26,10 +27,15 @@ struct InputPassCodeReducer: Reducer, Sendable {
     }
     
     enum Action {
+        case requestPolicy
+        case policyRequestResult(Bool)
+        
         case insert(_ digit: Int)
         case delete
         case logout
+        
         case enterWithBiometry
+        case biometryResult(Bool)
         
         case changeError(Bool)
     }
@@ -38,6 +44,22 @@ struct InputPassCodeReducer: Reducer, Sendable {
     
     func reduce(_ state: inout State, action: Action) -> ReducerResult<Action, Never> {
         switch action {
+            case .requestPolicy:
+                state.biometryAvailable = dependency.authorizationService.isFaceIdAvailable
+                return .init(effect: .run { send in
+                    let context = LAContext()
+                    let success = await withCheckedContinuation { continuation in
+                        context
+                            .evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: "Вход") { success, error in
+                                continuation.resume(returning: success)
+                            }
+                    }
+                    await send(.policyRequestResult(success))
+                })
+            case let .policyRequestResult(status):
+                dependency.authorizationService.accessFaceId(status)
+                state.biometryAvailable = dependency.authorizationService.isFaceIdAvailable
+                
             case let .insert(digit):
                 if state.passCode.count < state.maxDigits {
                     state.passCode.append("\(digit)")
@@ -65,21 +87,34 @@ struct InputPassCodeReducer: Reducer, Sendable {
             case .logout:
                 dependency.authorizationService.logout()
             case .enterWithBiometry:
-                let context = LAContext()
-                
-                var error: NSError?
-                guard context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) else {
-                    print("Cannot evaluate: \(error?.localizedDescription ?? "Unknown error")")
-                    return .init(effect: .none)
-                }
-                
-                let reason = context.biometryType == .faceID ? "Face ID" : "Touch ID"
-                
-                context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, error in
-                    DispatchQueue.main.async {
-                        dependency.authorizationService.unlockFaceId(success)
+                return .init(effect: .run { send in
+                    let context = LAContext()
+                    var error: NSError?
+
+                    guard context.canEvaluatePolicy(
+                        .deviceOwnerAuthenticationWithBiometrics,
+                        error: &error
+                    ) else {
+                        await send(.biometryResult(false))
+                        return
                     }
-                }
+
+                    let reason = context.biometryType == .faceID ? "Face ID" : "Touch ID"
+
+                    let success = await withCheckedContinuation { continuation in
+                        context.evaluatePolicy(
+                            .deviceOwnerAuthenticationWithBiometrics,
+                            localizedReason: reason
+                        ) { success, _ in
+                            continuation.resume(returning: success)
+                        }
+                    }
+
+                    print("Biometry success: \(success)")
+                    await send(.biometryResult(success))
+                })
+            case let .biometryResult(status):
+                dependency.authorizationService.unlockFaceId(status)
                 
             case let .changeError(isError):
                 state.isError = isError

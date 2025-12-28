@@ -67,7 +67,7 @@ struct InputPassCodeView: View {
                         digitButton(id)
                     }
 
-                    faceIdButton
+                    logoutButton
 
                     digitButton(0)
 
@@ -78,7 +78,11 @@ struct InputPassCodeView: View {
             .padding(20)
         }
         .onAppear {
-            store.send(.enterWithBiometry)
+            store.send(.requestPolicy)
+            print("Avaliable: \(store.biometryAvailable)")
+            if store.biometryAvailable {
+                store.send(.enterWithBiometry)
+            }
         }
     }
 
@@ -95,9 +99,9 @@ struct InputPassCodeView: View {
         }
     }
 
-    private var faceIdButton: some View {
+    private var logoutButton: some View {
         Button {
-            store.send(.enterWithBiometry)
+            store.send(.logout)
         } label: {
             Text("logoutButtonTitle")
                 .font(.system(size: 19, weight: .regular))
@@ -108,8 +112,12 @@ struct InputPassCodeView: View {
 
     private var deleteButton: some View {
         Button {
-            withAnimation {
-                _ = store.send(.delete)
+            if store.passCode.isEmpty && store.biometryAvailable {
+                store.send(.enterWithBiometry)
+            } else {
+                withAnimation {
+                    _ = store.send(.delete)
+                }
             }
         } label: {
             if store.passCode.isEmpty {

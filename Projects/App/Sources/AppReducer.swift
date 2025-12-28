@@ -41,6 +41,7 @@ struct AppReducer: Reducer, Sendable {
         }
         
         mutating func changeUnlocked(_ isUnlocked: Bool) {
+            print("Is unlocked: \(isUnlocked)")
             self.isUnlocked = isUnlocked
             changeState()
         }
@@ -88,7 +89,7 @@ struct AppReducer: Reducer, Sendable {
         switch action {
             case .onAppear:
                 let isAuthorized = dependency.authorizationService.isAuthorized
-                let isUnlocked = dependency.authorizationService.isUnlocked
+                let isUnlocked = false
                 let hasPassCode = dependency.authorizationService.hasPassCode
                 state.reloadAll(isAuthorized, isUnlocked, hasPassCode)
                 return observeAll()

@@ -16,6 +16,7 @@ public protocol NavigationServiceProtocol: AuthorizationStateProtocol {
 }
 
 internal final class NavigationService: NavigationServiceProtocol {
+    
     private let defaults = UserDefaults.standard
     private let authorizationState: AuthorizationStateProtocol
     
@@ -44,6 +45,12 @@ internal final class NavigationService: NavigationServiceProtocol {
     var isTabBarShowing: Bool {
         get {
             defaults.bool(forKey: "isTabBarShowing")
+        }
+    }
+    
+    var isFaceIdAvailable: Bool {
+        get {
+            defaults.bool(forKey: "isFaceIdAvailable")
         }
     }
     

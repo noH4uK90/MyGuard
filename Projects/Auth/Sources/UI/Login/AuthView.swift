@@ -27,8 +27,9 @@ struct AuthView: View {
             
             buttons
         }
-        .safeAreaPadding(15)
+        .safeAreaPadding(11)
         .applyGlassIfAvailable(in: .rect(cornerRadius: 15))
+        .safeAreaPadding(15)
     }
     
     @ViewBuilder
@@ -64,14 +65,8 @@ struct AuthView: View {
     
     @ViewBuilder
     var buttons: some View {
-        Button {
-            store.send(.openRecoveryPassword)
-        } label: {
-            Text("forgetPasswordButtonTitle")
-                .fontWeight(.bold)
-        }
-        
-        Spacer().frame(height: 30)
+        Spacer()
+            .frame(height: 30)
         
         Button {
             store.send(.loginOnTap)

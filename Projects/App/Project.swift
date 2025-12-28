@@ -19,7 +19,8 @@ let project = Project(
                     "UILaunchScreen": [
                         "UIColorName": "",
                         "UIImageName": ""
-                    ]
+                    ],
+                    "NSFaceIDUsageDescription": "Используется для входа в приложение"
                 ]
             ),
             sources: ["Sources/**"],
